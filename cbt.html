@@ -1,0 +1,158 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sᴍᴏᴋᴇ•X CBT</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef2f7;font-family:Arial,sans-serif;color:#172033}
+.top{background:#14213d;color:white;padding:14px 18px;position:sticky;top:0;z-index:3;display:flex;justify-content:space-between;align-items:center}
+.title{font-size:18px;font-weight:700}.timer{background:#e63946;padding:8px 13px;border-radius:8px;font-weight:700}
+.wrap{max-width:850px;margin:22px auto;padding:0 14px}.card{background:white;border-radius:14px;padding:22px;box-shadow:0 4px 18px #00000012}
+.meta{color:#64748b;font-size:14px;margin-bottom:14px}.q{font-size:18px;line-height:1.55;font-weight:600;margin-bottom:20px}
+.opt{display:block;border:1px solid #d9e0ea;border-radius:10px;padding:13px;margin:10px 0;cursor:pointer;background:#fff}
+.opt:hover{background:#f5f8ff}.opt input{margin-right:10px;accent-color:#2563eb}
+.nav{display:flex;gap:10px;margin-top:18px}.btn{border:0;border-radius:9px;padding:11px 17px;font-weight:700;cursor:pointer}.prev{background:#e2e8f0}.next{background:#2563eb;color:#fff}.submit{background:#16a34a;color:white;margin-left:auto}
+.palette{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}.num{width:35px;height:35px;border:0;border-radius:7px;background:#dbe3ee;cursor:pointer}.num.done{background:#2563eb;color:white}.num.current{outline:3px solid #93c5fd}
+#result{display:none;text-align:center}.score{font-size:42px;font-weight:800;color:#16a34a}.review{margin-top:18px;text-align:left}.wrong{background:#fff1f2;border-left:4px solid #e11d48;padding:10px;margin:8px 0}.right{background:#ecfdf5;border-left:4px solid #16a34a;padding:10px;margin:8px 0}
+</style>
+<style>
+:root{--bg:#05070d;--panel:#0b1020;--panel2:#10182b;--cyan:#00e5ff;--purple:#8b5cf6;--pink:#ff2bd6;--green:#22c55e;--red:#ff3b5c;--text:#eef7ff;--muted:#8fa3bd}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 15% 10%,#17205a 0,transparent 30%),radial-gradient(circle at 90% 15%,#35104a 0,transparent 28%),linear-gradient(135deg,#03050a,#080b16 55%,#05070d);color:var(--text);font-family:Inter,Arial,sans-serif;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(#ffffff04 1px,transparent 1px),linear-gradient(90deg,#ffffff04 1px,transparent 1px);background-size:35px 35px}
+.top{background:#070b15dd;border-bottom:1px solid #00e5ff33;color:white;padding:13px 18px;position:sticky;top:0;z-index:3;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(14px)}
+.title{font-size:18px;font-weight:900;letter-spacing:1px;text-transform:uppercase;text-shadow:0 0 14px #00e5ff66}.title span{color:var(--cyan)}
+.timer{background:#170b20;border:1px solid #ff2bd677;color:#ff75e6;padding:8px 13px;border-radius:9px;font-weight:900;box-shadow:0 0 16px #ff2bd622}
+.wrap{max-width:900px;margin:24px auto;padding:0 14px}
+.card{background:linear-gradient(145deg,#0b1020f2,#080d18f2);border:1px solid #6b7da033;border-radius:18px;padding:22px;box-shadow:0 15px 45px #0008,0 0 30px #00e5ff08}
+.meta{color:var(--cyan);font-size:13px;font-weight:800;letter-spacing:1px;margin-bottom:14px}
+.q{font-size:19px;line-height:1.6;font-weight:700;margin-bottom:20px}
+.opt{display:block;border:1px solid #34445f;border-radius:12px;padding:14px;margin:11px 0;cursor:pointer;background:#0c1424;transition:.18s}
+.opt:hover{border-color:var(--cyan);background:#0c1a2b;transform:translateX(2px);box-shadow:0 0 15px #00e5ff12}
+.opt input{margin-right:10px;accent-color:var(--cyan)}
+.nav{display:flex;gap:10px;margin-top:20px}.btn{border:0;border-radius:10px;padding:11px 17px;font-weight:900;cursor:pointer}.prev{background:#182235;color:#cbd5e1}.next{background:linear-gradient(90deg,#00b8d9,#2563eb);color:#fff;box-shadow:0 0 16px #00e5ff33}.submit{background:linear-gradient(90deg,#16a34a,#00c77b);color:white;margin-left:auto;box-shadow:0 0 16px #22c55e33}
+.palette{display:flex;flex-wrap:wrap;gap:7px;margin-top:20px}.num{width:35px;height:35px;border:1px solid #34445f;border-radius:8px;background:#111a2c;color:#9fb0c7;cursor:pointer}.num.done{background:#075985;color:white;border-color:#00e5ff}.num.current{outline:2px solid var(--cyan);box-shadow:0 0 12px #00e5ff55}
+#result{display:none;text-align:center}.score{font-size:48px;font-weight:1000;color:#37f59b;text-shadow:0 0 20px #22c55e55}.review{margin-top:18px;text-align:left}.wrong{background:#2a0e18;border-left:4px solid var(--red);padding:12px;margin:9px 0;border-radius:8px}.right{background:#092319;border-left:4px solid var(--green);padding:12px;margin:9px 0;border-radius:8px}
+small{color:#c8d5e6;line-height:1.6}.brand{color:#00e5ff;font-weight:1000}
+</style>
+
+<style>
+.calc-toggle{position:fixed;right:14px;top:82px;z-index:20;background:linear-gradient(135deg,#8b5cf6,#00d9ff);color:#fff;border:0;border-radius:12px;padding:11px 14px;font-weight:900;box-shadow:0 0 22px #00e5ff44;cursor:pointer}
+.calc-panel{position:fixed;right:-330px;top:0;width:310px;height:100vh;background:#080d18f7;border-left:1px solid #00e5ff55;z-index:30;padding:18px;box-shadow:-15px 0 40px #000b;transition:right .25s ease;backdrop-filter:blur(14px)}
+.calc-panel.open{right:0}.calc-head{display:flex;justify-content:space-between;align-items:center;color:#00e5ff;font-weight:900;margin-bottom:15px}.calc-close{background:#1a2436;color:#fff;border:0;border-radius:8px;padding:7px 10px;font-weight:900}
+.calc-display{width:100%;height:58px;background:#03060c;border:1px solid #33445e;border-radius:10px;color:#fff;font-size:24px;text-align:right;padding:10px;margin-bottom:12px}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.calc-key{height:50px;border:1px solid #33445e;border-radius:9px;background:#10192a;color:#eaf6ff;font-size:17px;font-weight:800;cursor:pointer}.calc-key:hover{border-color:#00e5ff}.calc-op{background:#17102b;color:#c9a7ff}.calc-eq{background:#00a9c7;color:white}.calc-clear{background:#3a1020;color:#ff8ba4}
+@media(max-width:600px){.calc-panel{width:290px}.calc-toggle{top:76px}}
+</style>
+
+<style>
+#installBtn{display:none;position:fixed;left:14px;bottom:14px;z-index:40;background:linear-gradient(135deg,#8b5cf6,#00d9ff);color:#fff;border:0;border-radius:12px;padding:12px 15px;font-weight:900;box-shadow:0 0 22px #00e5ff55}
+</style>
+<link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#00e5ff"></head><body>
+<button class="calc-toggle" onclick="toggleCalc()">🧮 CALCULATOR</button>
+<aside class="calc-panel" id="calcPanel">
+  <div class="calc-head"><span>🧮 CBT CALCULATOR</span><button class="calc-close" onclick="toggleCalc()">✕</button></div>
+  <input class="calc-display" id="calcDisplay" value="0" readonly>
+  <div class="calc-grid">
+    <button class="calc-key calc-clear" onclick="calcClear()">C</button>
+    <button class="calc-key" onclick="calcBack()">⌫</button>
+    <button class="calc-key calc-op" onclick="calcAdd('(')">(</button>
+    <button class="calc-key calc-op" onclick="calcAdd(')')">)</button>
+    <button class="calc-key" onclick="calcAdd('7')">7</button>
+    <button class="calc-key" onclick="calcAdd('8')">8</button>
+    <button class="calc-key" onclick="calcAdd('9')">9</button>
+    <button class="calc-key calc-op" onclick="calcAdd('/')">÷</button>
+    <button class="calc-key" onclick="calcAdd('4')">4</button>
+    <button class="calc-key" onclick="calcAdd('5')">5</button>
+    <button class="calc-key" onclick="calcAdd('6')">6</button>
+    <button class="calc-key calc-op" onclick="calcAdd('*')">×</button>
+    <button class="calc-key" onclick="calcAdd('1')">1</button>
+    <button class="calc-key" onclick="calcAdd('2')">2</button>
+    <button class="calc-key" onclick="calcAdd('3')">3</button>
+    <button class="calc-key calc-op" onclick="calcAdd('-')">−</button>
+    <button class="calc-key" onclick="calcAdd('0')">0</button>
+    <button class="calc-key" onclick="calcAdd('.')">.</button>
+    <button class="calc-key calc-op" onclick="calcAdd('+')">+</button>
+    <button class="calc-key calc-eq" onclick="calcEqual()">=</button>
+  </div>
+</aside>
+<script>
+function toggleCalc(){document.getElementById('calcPanel').classList.toggle('open')}
+function calcAdd(v){let d=document.getElementById('calcDisplay');if(d.value==='0'||d.value==='Error')d.value=v;else d.value+=v}
+function calcClear(){document.getElementById('calcDisplay').value='0'}
+function calcBack(){let d=document.getElementById('calcDisplay');d.value=d.value.length>1?d.value.slice(0,-1):'0'}
+function calcEqual(){let d=document.getElementById('calcDisplay');try{if(!/^[0-9+\-*/().\s]+$/.test(d.value))throw 0;d.value=String(Function('"use strict";return ('+d.value+')')())}catch(e){d.value='Error'}}
+</script>
+
+<div class="top"><div class="title">⚡ <span>Sᴍᴏᴋᴇ•X</span> // PHYSICS CBT</div><div class="timer" id="timer">30:00</div></div>
+<div class="wrap"><div class="card" id="exam"></div><div class="card" id="result"></div></div>
+<script>
+const qs=[{"q": "In a circuit, resistors of 10 Ω, 20 Ω and 30 Ω are connected between terminals A and B. When the 20 Ω and 30 Ω resistors are connected in parallel and this combination is in series with the 10 Ω resistor, the effective resistance is X. When all three resistors are connected in parallel, the effective resistance is Y. The value of X − Y is:", "opts": ["15.45 Ω", "18.22 Ω", "16.55 Ω", "17.55 Ω"], "ans": 2}, {"q": "A circular copper loop of resistance 0.50 Ω is placed perpendicular to a uniform magnetic field of 0.50 T. Due to external forces the area of the loop decreases at a rate of 1.26 × 10⁻³ m²/s. The induced current in the loop and the rate of Joule heating are respectively:", "opts": ["0.63 mA and 0.40 μW", "3.15 mA and 2.0 μW", "1.26 mA and 0.79 μW", "6.30 mA and 7.9 μW"], "ans": 2}, {"q": "A series RLC circuit has R = 15 Ω, L = 8 mH and C = 5 μF. At resonance, the rms current is 2.0 A. If the driving frequency is increased by 10% above resonance, the new rms current and the phase angle by which the voltage leads the current are respectively:", "opts": ["1.50 A and 45°", "1.78 A and 27°", "2.00 A and 0°", "1.20 A and 60°"], "ans": 1}, {"q": "A long solenoid has 500 turns per metre and carries a steady current of 2.0 A. The magnetic energy density inside the solenoid is:", "opts": ["0.4π J·m⁻³", "0.2π J·m⁻³", "0.8π J·m⁻³", "0.6π J·m⁻³"], "ans": 1}, {"q": "For a series RLC circuit of resistance 15 Ω, inductance 8 mH and capacitance 5 μF, the quality factor Q and the bandwidth (in Hz) are respectively:", "opts": ["1.33 and 596 Hz", "5.33 and 149 Hz", "4.00 and 199 Hz", "2.67 and 298 Hz"], "ans": 3}, {"q": "A proton moves in a uniform magnetic field B = 1.0 T with a speed of 2.0 × 10⁵ m/s at an angle of 30° to B. The radius of the helical path and the pitch of the helix are respectively (m = 1.67 × 10⁻²⁷ kg, q = 1.6 × 10⁻¹⁹ C):", "opts": ["2.09 mm and 2.27 cm", "1.04 mm and 1.13 cm", "4.18 mm and 4.52 cm", "0.52 mm and 0.57 cm"], "ans": 1}, {"q": "In a full-wave bridge rectifier with ideal diodes, the input voltage is Vi = 12 sin(100πt) V and the load resistance is 100 Ω. The average output voltage and the RMS output voltage are respectively:", "opts": ["12.0 V and 12.0 V", "7.64 V and 8.49 V", "0 V and 12.0 V", "3.82 V and 6.00 V"], "ans": 1}, {"q": "A nichrome thin film resistor has thickness 1 μm and resistivity 10⁻⁶ Ω·m. If the sheet resistance is 1 Ω per square, the aspect ratio (length/width) required to obtain a resistance of 500 Ω and the number of 2 mm × 2 mm squares that must be connected in series to achieve this are respectively:", "opts": ["250 and 250", "500 and 500", "100 and 100", "1000 and 1000"], "ans": 1}, {"q": "Two point charges +Q and +4Q are fixed 3.0 m apart in vacuum. A third charge +q is placed on the line joining them at the point where the net electrostatic force on it is zero. If Q = 3.0 μC, the distance of this point from the charge +Q and the magnitude of the net electric field at the midpoint between the two charges are respectively:", "opts": ["1.0 m and 1.2 × 10⁴ N·C⁻¹", "2.0 m and 3.6 × 10⁴ N·C⁻¹", "2.0 m and 1.2 × 10⁴ N·C⁻¹", "1.0 m and 3.6 × 10⁴ N·C⁻¹"], "ans": 2}, {"q": "In a series RLC circuit with R = 10 Ω, X_L = 15 Ω and X_C = 5 Ω, the instantaneous current is i(t) = 2 sin(ωt) A. The instantaneous voltages across the resistor, inductor and capacitor are respectively:", "opts": ["vR = 20 sin(ωt), vL = 30 sin(ωt − 90°), vC = 10 sin(ωt + 90°)", "vR = 20 sin(ωt), vL = 30 sin(ωt + 90°), vC = 10 sin(ωt − 90°)", "vR = 20 sin(ωt − 90°), vL = 30 sin(ωt), vC = 10 sin(ωt + 90°)", "vR = 20 sin(ωt + 90°), vL = 30 sin(ωt), vC = 10 sin(ωt − 90°)"], "ans": 1}, {"q": "A parallel-plate capacitor has a capacitance of 100 nF in air. It is connected to a 20 V battery and a dielectric of εr = 5 is inserted to completely fill the space between the plates. The new capacitance, the charge on the plates, and the energy stored are respectively:", "opts": ["20 nF, 2 μC, 20 μJ", "100 nF, 2 μC, 20 μJ", "500 nF, 2 μC, 20 μJ", "500 nF, 10 μC, 100 μJ"], "ans": 2}, {"q": "A 10 μF capacitor charged to 100 V is short-circuited through a 0.1 Ω resistor. The initial current, the time required for 99% of the stored energy to dissipate, and the total heat produced in the resistor are respectively:", "opts": ["1000 A, 2.3 μs and 50 mJ", "1000 A, 4.6 μs and 5 mJ", "100 A, 23 μs and 50 mJ", "100 A, 2.3 μs and 5 mJ"], "ans": 1}, {"q": "For an NPN transistor to operate in the active region as an amplifier, the base-emitter junction is forward biased and the collector-base junction is reverse biased. If VCC = 12 V, VBE = 0.7 V, and the desired Q-point is IC = 2 mA with VCE = 6 V (emitter grounded), the required collector resistance RC is:", "opts": ["1.5 kΩ", "3 kΩ", "6 kΩ", "12 kΩ"], "ans": 1}, {"q": "A charged particle moves with velocity v antiparallel to a uniform magnetic field B (angle 180°). An electric field E is then applied perpendicular to the direction of v. The subsequent trajectory of the particle is a:", "opts": ["circle", "helix", "parabola", "straight line"], "ans": 2}, {"q": "In Fleming’s right hand rule for a generator, if the thumb represents the direction of motion and the first finger represents the direction of the magnetic field (N to S), the second finger represents the direction of:", "opts": ["induced current", "magnetic flux", "flux density", "induced EMF"], "ans": 0}, {"q": "A circular copper loop of resistance 0.50 Ω is placed perpendicular to a uniform magnetic field of 0.50 T. The area of the loop decreases at a rate of 1.26 × 10⁻³ m²/s. The induced emf in the loop and the power dissipated as heat are:", "opts": ["1.2 × 10⁻³ V and 2.88 μW", "6.3 × 10⁻⁴ V and 0.79 μW", "3.1 × 10⁻⁴ V and 0.19 μW", "7.9 × 10⁻³ V and 12.5 μW"], "ans": 1}, {"q": "Which of the following statements about a ferromagnetic material is correct?", "opts": ["It repels other magnetic materials", "It has low relative permeability", "It has a high susceptibility", "It attracts non-magnetic materials"], "ans": 2}, {"q": "A parallel plate capacitor has plates of area 0.02 m² separated by 1 mm in air. It is charged to 100 V and then isolated from the battery. If the plate separation is doubled, the new capacitance, voltage, and energy stored are:", "opts": ["0.0885 nF, 200 V and 1.77 μJ", "0.0885 nF, 100 V and 0.885 μJ", "0.177 nF, 100 V and 0.885 μJ", "0.354 nF, 50 V and 0.44 μJ"], "ans": 0}, {"q": "Two long parallel wires are separated by 1.0 cm. Wire 1 carries 30 A north and Wire 2 carries 50 A south. Each wire is 5.0 m long. The magnitude of the magnetic force between them and the nature of the force are respectively:", "opts": ["0.05 N and repulsive", "0.15 N and repulsive", "0.15 N and attractive", "0.05 N and attractive"], "ans": 1}, {"q": "In a moving-coil galvanometer, for small deflections, the deflection θ is related to the current I by the relation:", "opts": ["I ∝ tan θ", "I ∝ sin θ", "I ∝ θ", "I ∝ cos θ"], "ans": 2}];
+let i=0, answers=Array(qs.length).fill(null), seconds=1800, submitted=false;
+const explanations = [
+"Parallel: (20×30)/(20+30)=12 Ω. Series with 10 Ω gives X=22 Ω. All three in parallel gives Y=60/11=5.45 Ω. Therefore X−Y=16.55 Ω.",
+"Faraday's law gives emf = B(dA/dt)=0.50×1.26×10⁻³=6.3×10⁻⁴ V. Current = emf/R = 1.26 mA. Joule heating P=I²R≈0.79 μW.",
+"At resonance X_L=X_C and the impedance is R. Increasing frequency makes X_L increase and X_C decrease; using the RLC impedance gives about 1.78 A and a 27° leading phase.",
+"For a long solenoid, B=μ₀nI and magnetic energy density u=B²/(2μ₀), giving 0.2π J·m⁻³.",
+"Quality factor Q=(1/R)√(L/C)=2.67. Bandwidth = R/(2πL)≈298 Hz.",
+"The perpendicular velocity is v sin30°. Use r=mv⊥/(qB), giving about 1.04 mm. The parallel velocity is v cos30°; pitch=v∥T, giving about 1.13 cm.",
+"For a full-wave rectifier, average output = 2Vₘ/π=7.64 V and RMS output = Vₘ/√2=8.49 V.",
+"Sheet resistance is ρ/t=1 Ω/square. A 500 Ω resistor therefore needs 500 squares, so the aspect ratio and number of 2 mm×2 mm squares are both 500.",
+"At the zero-force point, fields from +Q and +4Q oppose between them. Solving gives 2.0 m from +Q. At the midpoint the fields add, giving 1.2×10⁴ N/C.",
+"For current i=2sin(ωt), resistor voltage is in phase, inductor voltage leads by 90°, and capacitor voltage lags by 90°.",
+"With the battery connected, V stays 20 V. Dielectric multiplies capacitance by εr: 500 nF. Q=CV=10 μC and U=½CV²=100 μJ.",
+"Initial current V/R=1000 A. Total initial energy is ½CV²=50 mJ. For 99% energy dissipation, energy remaining is 1%; since energy decays as e⁻²t/RC, t≈4.6 μs.",
+"Emitter is grounded, so the resistor drops VCC−VCE=6 V. RC=6 V/2 mA=3 kΩ.",
+"Initially v is antiparallel to B, so magnetic force is zero. The perpendicular electric field gives constant acceleration, producing a parabola.",
+"Fleming's right-hand rule: thumb = motion, first finger = magnetic field, second finger = induced current.",
+"Induced emf = B(dA/dt)=6.3×10⁻⁴ V. Power = emf²/R≈0.79 μW.",
+"Ferromagnetic materials have high magnetic susceptibility.",
+"After isolation, charge Q remains constant. Doubling plate separation halves capacitance, so voltage doubles and energy Q²/(2C) doubles: 0.0885 nF, 200 V, 1.77 μJ.",
+"Parallel currents in opposite directions repel. F=μ₀I₁I₂L/(2πd)=0.15 N.",
+"For a moving-coil galvanometer at small deflections, deflection is proportional to current: I∝θ."
+];
+const letters=["A","B","C","D"];
+function render(){
+ const x=qs[i];
+ document.getElementById("exam").innerHTML=`
+ <div class="meta">Sᴍᴏᴋᴇ•X • CBT TRAINING &nbsp;|&nbsp; QUESTION ${i+1} OF ${qs.length}</div>
+ <div class="q">${x.q}</div>
+ ${x.opts.map((o,j)=>`<label class="opt"><input type="radio" name="ans" value="${j}" ${answers[i]===j?"checked":""}> <b>${letters[j]}.</b> ${o}</label>`).join("")}
+ <div class="nav">
+  <button class="btn prev" onclick="prev()">Previous</button>
+  ${i<qs.length-1?'<button class="btn next" onclick="next()">Next</button>':'<button class="btn submit" onclick="submitExam()">Submit Exam</button>'}
+ </div>
+ <div class="palette">${qs.map((_,n)=>`<button class="num ${answers[n]!==null?'done':''} ${n===i?'current':''}" onclick="go(${n})">${n+1}</button>`).join("")}</div>`;
+ document.querySelectorAll('input[name="ans"]').forEach(el=>el.onchange=()=>answers[i]=Number(el.value));
+}
+function next(){save(); if(i<qs.length-1){i++;render()}}
+function prev(){save(); if(i>0){i--;render()}}
+function go(n){save();i=n;render()}
+function save(){const e=document.querySelector('input[name="ans"]:checked');if(e)answers[i]=Number(e.value)}
+function submitExam(){
+ save(); let score=answers.reduce((s,a,n)=>s+(a===qs[n].ans?1:0),0);
+ submitted=true; clearInterval(clock);
+ let review=qs.map((x,n)=>answers[n]===x.ans?
+ `<div class="right"><b>${n+1}. Correct</b> — ${letters[x.ans]}. ${x.opts[x.ans]}<br><small><b>Correction:</b> ${explanations[n]}</small></div>`:
+ `<div class="wrong"><b>${n+1}. ${answers[n]===null?"Not answered":"Incorrect"}</b><br>Your answer: ${answers[n]===null?"—":letters[answers[n]]+". "+x.opts[answers[n]]}<br><b>Correct:</b> ${letters[x.ans]}. ${x.opts[x.ans]}<br><small><b>Correction:</b> ${explanations[n]}</small></div>`).join("");
+ document.getElementById("exam").style.display="none";
+ document.getElementById("result").style.display="block";
+ document.getElementById("result").innerHTML=`<h2>⚡ Sᴍᴏᴋᴇ•X — EXAM COMPLETE</h2><div class="score">${score}/${qs.length}</div><p>${Math.round(score/qs.length*100)}%</p><div class="review">${review}</div><button class="btn next" onclick="location.reload()">Retake Test</button>`;
+}
+function tick(){if(submitted)return;seconds--;let m=Math.floor(seconds/60),s=seconds%60;document.getElementById("timer").textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;if(seconds<=0)submitExam()}
+let clock=setInterval(tick,1000);render();
+</script>
+<button id="installBtn">📲 INSTALL APP</button>
+<script>
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt=e; document.getElementById('installBtn').style.display='block';
+});
+document.getElementById('installBtn').onclick = async () => {
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt=null;
+  document.getElementById('installBtn').style.display='none';
+};
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
+</script>
+</body></html>
