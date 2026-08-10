@@ -46,15 +46,23 @@ label{display:block;font-size:13px;font-weight:800;margin:14px 0 7px;color:#cbd8
       <input id="confirm" type="password" minlength="6" placeholder="Repeat password">
     </div>
 
-    <button class="main" id="submitBtn">LOGIN TO CBT</button>
+    <button class="main" id="submitBtn" disabled>LOADING...</button>
     <div id="msg" class="msg"></div>
   </form>
 
-  <div class="foot">Sᴍᴏᴋᴇ•X CBT • Local demo authentication</div>
+  <div class="foot">Sᴍᴏᴋᴇ•X CBT • Online authentication</div>
 </div>
 
 <script>
+const supabaseClient = supabase.createClient(
+  'https://drpmzohaaoygnpyepzde.supabase.co',
+  'sb_publishable_9XUgz38Q6vBK95k4oLnBy_A_jUBkVlrR'
+);
+
 let mode='login';
+
+document.getElementById('submitBtn').disabled=false;
+document.getElementById('submitBtn').textContent='LOGIN TO CBT';
 
 function showMode(next){
   mode=next;
@@ -67,37 +75,189 @@ function showMode(next){
   document.getElementById('password').autocomplete=reg?'new-password':'current-password';
   clearMsg();
 }
+
 function togglePassword(){
   const p=document.getElementById('password'), b=document.querySelector('.show');
-  p.type=p.type==='password'?'text':'password'; b.textContent=p.type==='password'?'Show':'Hide';
+  p.type=p.type==='password'?'text':'password';
+  b.textContent=p.type==='password'?'Show':'Hide';
 }
-function clearMsg(){document.getElementById('msg').textContent='';document.getElementById('msg').className='msg'}
-function msg(t,ok=false){const m=document.getElementById('msg');m.textContent=t;m.className='msg '+(ok?'success':'error')}
-function submitForm(e){
-  e.preventDefault(); clearMsg();
+
+function clearMsg(){
+  document.getElementById('msg').textContent='';
+  document.getElementById('msg').className='msg';
+}
+
+function msg(t,ok=false){
+  const m=document.getElementById('msg');
+  m.textContent=t;
+  m.className='msg '+(ok?'success':'error');
+}
+
+async function submitForm(e){
+  e.preventDefault();
+  clearMsg();
+
   const email=document.getElementById('email').value.trim().toLowerCase();
   const password=document.getElementById('password').value;
-  const users=JSON.parse(localStorage.getItem('smokeXUsers')||'{}');
+  const btn=document.getElementById('submitBtn');
+
+  btn.disabled=true;
 
   if(mode==='register'){
+
     const name=document.getElementById('name').value.trim();
     const confirm=document.getElementById('confirm').value;
-    if(!name) return msg('Enter your name.');
-    if(password.length<6) return msg('Password must be at least 6 characters.');
-    if(password!==confirm) return msg('Passwords do not match.');
-    if(users[email]) return msg('An account with this email already exists.');
-    users[email]={name,password}; localStorage.setItem('smokeXUsers',JSON.stringify(users));
-    localStorage.setItem('smokeXSession',JSON.stringify({email,name}));
+
+    if(!name){
+      btn.disabled=false;
+      return msg('Enter your name.');
+    }
+
+    if(password.length<6){
+      btn.disabled=false;
+      return msg('Password must be at least 6 characters.');
+    }
+
+    if(password!==confirm){
+      btn.disabled=false;
+      return msg('Passwords do not match.');
+    }
+
+    const {data,error}=await supabaseClient.auth.signUp({
+      email,
+      password,
+      options:{data:{full_name:name}}
+    });
+
+    btn.disabled=false;
+
+    if(error){
+      return msg(error.message);
+    }
+
+    /*
+      IMPORTANT:
+      When Supabase requires email confirmation,
+      data.session will be null.
+    */
+
+    if(!data.session){
+
+      msg(
+        'Account created! Check your email to confirm your account, then log in.',
+        true
+      );
+
+      showMode('login');
+
+      return;
+    }
+
+    /*
+      Extra protection:
+      If Supabase somehow returns a session
+      for an unconfirmed account, immediately
+      sign that account out.
+    */
+
+    if(data.user && !data.user.email_confirmed_at){
+
+      await supabaseClient.auth.signOut();
+
+      return msg(
+        'Please confirm your email before logging in.'
+      );
+    }
+
+    /*
+      Only confirmed users reach this point.
+    */
+
+    if(data.user){
+
+      await supabaseClient
+        .from('profiles')
+        .update({display_name:name})
+        .eq('id',data.user.id);
+
+    }
+
     msg('Account created! Opening CBT...',true);
-    setTimeout(()=>location.href='cbt.html',600);
+
+    setTimeout(()=>{
+      location.href='cbt.html';
+    },600);
+
   }else{
-    if(!users[email]) return msg('No account found. Create an account first.');
-    if(users[email].password!==password) return msg('Incorrect password.');
-    localStorage.setItem('smokeXSession',JSON.stringify({email,name:users[email].name}));
+
+    const {data,error}=await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    btn.disabled=false;
+
+    if(error){
+
+      const errorMessage=error.message.toLowerCase();
+
+      if(
+        errorMessage.includes('email not confirmed') ||
+        errorMessage.includes('email_not_confirmed') ||
+        errorMessage.includes('confirm your email')
+      ){
+
+        return msg('Please confirm your email before logging in.');
+      }
+
+      return msg('Incorrect email or password.');
+    }
+
+    /*
+      THIS IS THE IMPORTANT PART.
+
+      Even if Supabase gives us a session,
+      we check email_confirmed_at before
+      allowing the user into the CBT.
+    */
+
+    if(!data.user || !data.user.email_confirmed_at){
+
+      await supabaseClient.auth.signOut();
+
+      return msg('Please confirm your email before logging in.');
+    }
+
     msg('Login successful! Opening CBT...',true);
-    setTimeout(()=>location.href='cbt.html',600);
+
+    setTimeout(()=>{
+      location.href='cbt.html';
+    },600);
   }
 }
+
+
+/*
+  EXTRA SESSION PROTECTION.
+
+  If an unconfirmed user somehow already
+  has a session, immediately sign them out.
+*/
+
+(async function(){
+
+  const {data}=await supabaseClient.auth.getSession();
+
+  if(
+    data.session &&
+    data.session.user &&
+    !data.session.user.email_confirmed_at
+  ){
+
+    await supabaseClient.auth.signOut();
+  }
+
+})();
 </script>
 </body>
 </html>
