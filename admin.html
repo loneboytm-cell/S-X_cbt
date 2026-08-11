@@ -149,6 +149,13 @@ font-weight:bold;
 cursor:pointer
 }
 
+.primary:disabled,
+.danger:disabled,
+.secondary:disabled{
+opacity:.5;
+cursor:not-allowed
+}
+
 .danger{
 background:#dc173c;
 color:#fff;
@@ -157,6 +164,20 @@ border-radius:8px;
 padding:8px 11px;
 font-weight:bold;
 cursor:pointer
+}
+
+.delete-all{
+background:#8f102b;
+color:#fff;
+border:1px solid #ff3b5c66;
+border-radius:9px;
+padding:11px 15px;
+font-weight:bold;
+cursor:pointer
+}
+
+.delete-all:hover{
+background:#c5163c
 }
 
 .secondary{
@@ -173,6 +194,10 @@ cursor:pointer
 display:flex;
 gap:10px;
 margin-bottom:15px
+}
+
+.toolbar input{
+flex:1
 }
 
 input,textarea,select{
@@ -331,13 +356,17 @@ margin-top:15px
 position:fixed;
 bottom:20px;
 right:20px;
+left:20px;
+max-width:500px;
+margin:auto;
 background:#10182b;
 border:1px solid #00e5ff55;
 padding:13px 17px;
 border-radius:9px;
 display:none;
 z-index:100;
-font-weight:bold
+font-weight:bold;
+text-align:center
 }
 
 .message.show{
@@ -387,6 +416,11 @@ grid-column:auto
 flex-wrap:wrap
 }
 
+.toolbar input{
+width:100%;
+flex:100%
+}
+
 .student{
 align-items:flex-start;
 gap:10px;
@@ -400,9 +434,17 @@ flex-direction:column
 <body>
 
 <header>
-<div class="logo">⚡ Sᴍᴏᴋᴇ•X ADMIN 👑</div>
-<button class="logout" onclick="logout()">LOGOUT</button>
+
+<div class="logo">
+⚡ Sᴍᴏᴋᴇ•X ADMIN 👑
+</div>
+
+<button class="logout" onclick="logout()">
+LOGOUT
+</button>
+
 </header>
+
 
 <div class="layout">
 
@@ -422,7 +464,9 @@ flex-direction:column
 
 </aside>
 
+
 <main>
+
 
 <!-- DASHBOARD -->
 
@@ -433,6 +477,7 @@ flex-direction:column
 <div class="sub">
 Welcome to the Sᴍᴏᴋᴇ•X CBT control panel.
 </div>
+
 
 <div class="stats">
 
@@ -453,6 +498,7 @@ Welcome to the Sᴍᴏᴋᴇ•X CBT control panel.
 
 </div>
 
+
 <div class="card">
 
 <h3>Quick Actions</h3>
@@ -466,6 +512,7 @@ Welcome to the Sᴍᴏᴋᴇ•X CBT control panel.
 </section>
 
 
+
 <!-- QUESTIONS -->
 
 <section id="questions" class="page">
@@ -475,6 +522,7 @@ Welcome to the Sᴍᴏᴋᴇ•X CBT control panel.
 <div class="sub">
 Create and manage CBT questions.
 </div>
+
 
 <div class="toolbar">
 
@@ -487,11 +535,17 @@ oninput="renderQuestions()">
 ➕ Add Question
 </button>
 
+<button class="delete-all" onclick="deleteAllQuestions()">
+🗑️ Delete All
+</button>
+
 </div>
+
 
 <div id="questionList"></div>
 
 </section>
+
 
 
 <!-- STUDENTS -->
@@ -504,6 +558,7 @@ oninput="renderQuestions()">
 View registered users and account roles.
 </div>
 
+
 <div class="toolbar">
 
 <input
@@ -513,12 +568,15 @@ oninput="renderStudents()">
 
 </div>
 
+
 <div id="studentList"></div>
 
 </section>
 
 </main>
+
 </div>
+
 
 
 <!-- QUESTION MODAL -->
@@ -529,77 +587,119 @@ oninput="renderStudents()">
 
 <div class="modal-head">
 
-<h2 id="modalTitle">Add Question</h2>
+<h2 id="modalTitle">
+Add Question
+</h2>
 
-<button class="close" onclick="closeModal()">✕</button>
+<button class="close" onclick="closeModal()">
+✕
+</button>
 
 </div>
 
+
 <input type="hidden" id="editId">
 
+
 <div class="grid">
+
 
 <div>
 <label>SUBJECT</label>
 <input id="subject" placeholder="Physics">
 </div>
 
+
 <div>
 <label>TOPIC</label>
 <input id="topic" placeholder="Electricity">
 </div>
+
 
 <div class="full">
 <label>QUESTION</label>
 <textarea id="question" placeholder="Enter question"></textarea>
 </div>
 
+
 <div>
 <label>OPTION A</label>
 <input id="a">
 </div>
+
 
 <div>
 <label>OPTION B</label>
 <input id="b">
 </div>
 
+
 <div>
 <label>OPTION C</label>
 <input id="c">
 </div>
+
 
 <div>
 <label>OPTION D</label>
 <input id="d">
 </div>
 
+
 <div>
 <label>CORRECT ANSWER</label>
+
 <select id="answer">
-<option value="">Select answer</option>
+
+<option value="">
+Select answer
+</option>
+
 <option value="A">A</option>
 <option value="B">B</option>
 <option value="C">C</option>
 <option value="D">D</option>
+
 </select>
+
 </div>
+
 
 <div>
 <label>DIFFICULTY</label>
+
 <select id="difficulty">
-<option value="easy">Easy</option>
-<option value="medium" selected>Medium</option>
-<option value="hard">Hard</option>
+
+<option value="easy">
+Easy
+</option>
+
+<option value="medium" selected>
+Medium
+</option>
+
+<option value="hard">
+Hard
+</option>
+
 </select>
+
 </div>
+
 
 <div class="full">
+
 <label>EXPLANATION</label>
-<textarea id="explanation" placeholder="Explain the correct answer"></textarea>
+
+<textarea
+id="explanation"
+placeholder="Explain the correct answer">
+</textarea>
+
 </div>
 
 </div>
+
 
 <div class="form-buttons">
 
@@ -614,24 +714,33 @@ Save Question
 </div>
 
 </div>
+
 </div>
+
 
 
 <div class="message" id="message"></div>
 
 
+
 <script>
 
 const supabaseClient = supabase.createClient(
+
 'https://drpmzohaaoygnpyepzde.supabase.co',
+
 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkcnBtem9oYWFveWducHllcHpkZSIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzg2MzEzNjE3LCJleHAiOjIxMDE4ODk2MTl9.MrGNejr7eyrk2l1CCn9xkehLB6_aGltYm9UOrf0XPbE'
+
 );
+
 
 let questions=[];
 let students=[];
 
 
-/* CHECK ADMIN */
+/* =========================
+   CHECK ADMIN
+========================= */
 
 async function start(){
 
@@ -639,12 +748,21 @@ const {
 data:{session}
 }=await supabaseClient.auth.getSession();
 
+
 if(!session){
+
 location.href='index.html';
+
 return;
+
 }
 
-const {data:isAdmin,error}=await supabaseClient.rpc('is_admin');
+
+const {
+data:isAdmin,
+error
+}=await supabaseClient.rpc('is_admin');
+
 
 if(error || isAdmin !== true){
 
@@ -655,67 +773,100 @@ await supabaseClient.auth.signOut();
 location.href='index.html';
 
 return;
-}
-
-loadQuestions();
-loadStudents();
 
 }
 
 
-/* NAVIGATION */
+await loadQuestions();
+
+await loadStudents();
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
 
 function page(id,button){
 
 document.querySelectorAll('.page').forEach(x=>{
-x.classList.remove('active')
+
+x.classList.remove('active');
+
 });
+
 
 document.getElementById(id).classList.add('active');
 
+
 document.querySelectorAll('.nav').forEach(x=>{
-x.classList.remove('active')
+
+x.classList.remove('active');
+
 });
+
 
 button.classList.add('active');
 
 }
 
 
-/* QUESTIONS */
+/* =========================
+   LOAD QUESTIONS
+========================= */
 
 async function loadQuestions(){
 
-const {data,error}=await supabaseClient
+const {
+data,
+error
+}=await supabaseClient
 .from('questions')
 .select('*')
 .order('created_at',{ascending:false});
 
+
 if(error){
+
 show(error.message,true);
+
 return;
+
 }
+
 
 questions=data||[];
 
-document.getElementById('questionCount').textContent=questions.length;
+
+document.getElementById('questionCount').textContent=
+questions.length;
+
 
 renderQuestions();
 
 }
 
 
+/* =========================
+   RENDER QUESTIONS
+========================= */
+
 function renderQuestions(){
 
-const box=document.getElementById('questionList');
+const box=
+document.getElementById('questionList');
+
 
 const search=
 (document.getElementById('search').value||'')
 .toLowerCase();
 
+
 const list=questions.filter(q=>{
 
 return [
+
 q.subject,
 q.topic,
 q.question,
@@ -723,6 +874,7 @@ q.option_a,
 q.option_b,
 q.option_c,
 q.option_d
+
 ]
 .join(' ')
 .toLowerCase()
@@ -734,12 +886,15 @@ q.option_d
 if(!list.length){
 
 box.innerHTML=`
+
 <div class="card">
 No questions found.
 </div>
+
 `;
 
 return;
+
 }
 
 
@@ -748,18 +903,28 @@ box.innerHTML=list.map((q,i)=>`
 <div class="question">
 
 <div class="question-title">
+
 ${i+1}. ${esc(q.question)}
+
 </div>
+
 
 <div class="tags">
 
-<span class="tag">${esc(q.subject||'No subject')}</span>
+<span class="tag">
+${esc(q.subject||'No subject')}
+</span>
 
-<span class="tag">${esc(q.topic||'No topic')}</span>
+
+<span class="tag">
+${esc(q.topic||'No topic')}
+</span>
+
 
 <span class="tag">
 Difficulty: ${esc(q.difficulty||'medium')}
 </span>
+
 
 <span class="tag">
 Answer: ${esc(q.correct_answer||'')}
@@ -767,16 +932,24 @@ Answer: ${esc(q.correct_answer||'')}
 
 </div>
 
+
 <div class="actions">
 
-<button class="secondary"
+<button
+class="secondary"
 onclick="editQuestion('${q.id}')">
+
 ✏️ Edit
+
 </button>
 
-<button class="danger"
+
+<button
+class="danger"
 onclick="deleteQuestion('${q.id}')">
+
 🗑️ Delete
+
 </button>
 
 </div>
@@ -788,98 +961,270 @@ onclick="deleteQuestion('${q.id}')">
 }
 
 
-/* OPEN ADD */
+/* =========================
+   DELETE ALL QUESTIONS
+========================= */
+
+async function deleteAllQuestions(){
+
+if(!questions.length){
+
+show('There are no questions to delete.');
+
+return;
+
+}
+
+
+const firstConfirm=confirm(
+
+'⚠️ DELETE ALL QUESTIONS?\n\n' +
+
+'This will permanently delete ALL ' +
+questions.length +
+' questions from the CBT database.\n\n' +
+
+'Students and profiles will NOT be deleted.\n\n' +
+
+'Press OK to continue.'
+
+);
+
+
+if(!firstConfirm){
+
+return;
+
+}
+
+
+const secondConfirm=confirm(
+
+'FINAL WARNING ⚠️\n\n' +
+
+'You are about to permanently delete ' +
+questions.length +
+' questions.\n\n' +
+
+'This cannot be undone.\n\n' +
+
+'Delete them now?'
+
+);
+
+
+if(!secondConfirm){
+
+return;
+
+}
+
+
+const button=document.querySelector('.delete-all');
+
+button.disabled=true;
+
+button.textContent='Deleting...';
+
+
+/*
+Supabase requires a filter for DELETE.
+This condition matches every UUID except
+an impossible all-zero UUID.
+*/
+
+const {
+error
+}=await supabaseClient
+.from('questions')
+.delete()
+.neq(
+'id',
+'00000000-0000-0000-0000-000000000000'
+);
+
+
+button.disabled=false;
+
+button.textContent='🗑️ Delete All';
+
+
+if(error){
+
+show(
+'Could not delete questions: '+error.message,
+true
+);
+
+return;
+
+}
+
+
+questions=[];
+
+document.getElementById('questionCount').textContent='0';
+
+renderQuestions();
+
+show(
+'✅ All questions deleted successfully.'
+);
+
+}
+
+
+/* =========================
+   OPEN ADD
+========================= */
 
 function openAdd(){
 
 clearForm();
 
+
 document.getElementById('modalTitle').textContent=
 'Add Question';
+
 
 document.getElementById('saveBtn').textContent=
 'Save Question';
 
-document.getElementById('modal').classList.add('show');
+
+document.getElementById('modal')
+.classList.add('show');
 
 }
 
 
-/* EDIT */
+/* =========================
+   EDIT QUESTION
+========================= */
 
 function editQuestion(id){
 
-const q=questions.find(x=>x.id===id);
+const q=
+questions.find(x=>x.id===id);
+
 
 if(!q)return;
 
-document.getElementById('editId').value=q.id;
 
-document.getElementById('subject').value=q.subject||'';
+document.getElementById('editId').value=
+q.id;
 
-document.getElementById('topic').value=q.topic||'';
 
-document.getElementById('question').value=q.question||'';
+document.getElementById('subject').value=
+q.subject||'';
 
-document.getElementById('a').value=q.option_a||'';
 
-document.getElementById('b').value=q.option_b||'';
+document.getElementById('topic').value=
+q.topic||'';
 
-document.getElementById('c').value=q.option_c||'';
 
-document.getElementById('d').value=q.option_d||'';
+document.getElementById('question').value=
+q.question||'';
 
-document.getElementById('answer').value=q.correct_answer||'';
+
+document.getElementById('a').value=
+q.option_a||'';
+
+
+document.getElementById('b').value=
+q.option_b||'';
+
+
+document.getElementById('c').value=
+q.option_c||'';
+
+
+document.getElementById('d').value=
+q.option_d||'';
+
+
+document.getElementById('answer').value=
+q.correct_answer||'';
+
 
 document.getElementById('difficulty').value=
 q.difficulty||'medium';
 
+
 document.getElementById('explanation').value=
 q.explanation||'';
+
 
 document.getElementById('modalTitle').textContent=
 'Edit Question';
 
+
 document.getElementById('saveBtn').textContent=
 'Update Question';
 
-document.getElementById('modal').classList.add('show');
+
+document.getElementById('modal')
+.classList.add('show');
 
 }
 
 
-/* SAVE */
+/* =========================
+   SAVE QUESTION
+========================= */
 
 async function saveQuestion(){
 
-const id=document.getElementById('editId').value;
+const id=
+document.getElementById('editId').value;
+
 
 const payload={
 
-subject:document.getElementById('subject').value.trim(),
+subject:
+document.getElementById('subject')
+.value.trim(),
 
-topic:document.getElementById('topic').value.trim(),
+topic:
+document.getElementById('topic')
+.value.trim(),
 
-question:document.getElementById('question').value.trim(),
+question:
+document.getElementById('question')
+.value.trim(),
 
-option_a:document.getElementById('a').value.trim(),
+option_a:
+document.getElementById('a')
+.value.trim(),
 
-option_b:document.getElementById('b').value.trim(),
+option_b:
+document.getElementById('b')
+.value.trim(),
 
-option_c:document.getElementById('c').value.trim(),
+option_c:
+document.getElementById('c')
+.value.trim(),
 
-option_d:document.getElementById('d').value.trim(),
+option_d:
+document.getElementById('d')
+.value.trim(),
 
-correct_answer:document.getElementById('answer').value,
+correct_answer:
+document.getElementById('answer')
+.value,
 
-difficulty:document.getElementById('difficulty').value,
+difficulty:
+document.getElementById('difficulty')
+.value,
 
-explanation:document.getElementById('explanation').value.trim()
+explanation:
+document.getElementById('explanation')
+.value.trim()
 
 };
 
 
 if(
+
 !payload.subject ||
 !payload.question ||
 !payload.option_a ||
@@ -887,35 +1232,47 @@ if(
 !payload.option_c ||
 !payload.option_d ||
 !payload.correct_answer
+
 ){
 
-show('Fill all required question fields.',true);
+show(
+'Fill all required question fields.',
+true
+);
+
 return;
 
 }
 
 
-const button=document.getElementById('saveBtn');
+const button=
+document.getElementById('saveBtn');
+
 
 button.disabled=true;
+
 
 let error;
 
 
 if(id){
 
-const result=await supabaseClient
+const result=
+await supabaseClient
 .from('questions')
 .update(payload)
 .eq('id',id);
+
 
 error=result.error;
 
 }else{
 
-const result=await supabaseClient
+const result=
+await supabaseClient
 .from('questions')
 .insert(payload);
+
 
 error=result.error;
 
@@ -928,6 +1285,7 @@ button.disabled=false;
 if(error){
 
 show(error.message,true);
+
 return;
 
 }
@@ -935,27 +1293,39 @@ return;
 
 closeModal();
 
+
 show(
+
 id
 ?'Question updated successfully!'
 :'Question added successfully!'
+
 );
 
-loadQuestions();
+
+await loadQuestions();
 
 }
 
 
-/* DELETE */
+/* =========================
+   DELETE ONE QUESTION
+========================= */
 
 async function deleteQuestion(id){
 
 if(!confirm(
 'Are you sure you want to delete this question?'
-))return;
+)){
+
+return;
+
+}
 
 
-const {error}=await supabaseClient
+const {
+error
+}=await supabaseClient
 .from('questions')
 .delete()
 .eq('id',id);
@@ -964,6 +1334,7 @@ const {error}=await supabaseClient
 if(error){
 
 show(error.message,true);
+
 return;
 
 }
@@ -971,26 +1342,35 @@ return;
 
 show('Question deleted.');
 
-loadQuestions();
+await loadQuestions();
 
 }
 
 
-/* STUDENTS */
+/* =========================
+   LOAD STUDENTS
+========================= */
 
 async function loadStudents(){
 
-const {data,error}=await supabaseClient
+const {
+data,
+error
+}=await supabaseClient
 .from('profiles')
 .select(
 'id,username,display_name,role,xp,level,created_at'
 )
-.order('created_at',{ascending:false});
+.order(
+'created_at',
+{ascending:false}
+);
 
 
 if(error){
 
 show(error.message,true);
+
 return;
 
 }
@@ -998,38 +1378,56 @@ return;
 
 students=data||[];
 
-const normal=students.filter(
+
+const normal=
+students.filter(
 x=>x.role!=='admin'
 ).length;
 
-const admins=students.filter(
+
+const admins=
+students.filter(
 x=>x.role==='admin'
 ).length;
 
-document.getElementById('studentCount').textContent=normal;
 
-document.getElementById('adminCount').textContent=admins;
+document.getElementById('studentCount')
+.textContent=normal;
+
+
+document.getElementById('adminCount')
+.textContent=admins;
+
 
 renderStudents();
 
 }
 
 
+/* =========================
+   RENDER STUDENTS
+========================= */
+
 function renderStudents(){
 
-const box=document.getElementById('studentList');
+const box=
+document.getElementById('studentList');
+
 
 const search=
-(document.getElementById('studentSearch').value||'')
+(document.getElementById('studentSearch')
+.value||'')
 .toLowerCase();
 
 
 const list=students.filter(x=>{
 
 return [
+
 x.username,
 x.display_name,
 x.role
+
 ]
 .join(' ')
 .toLowerCase()
@@ -1055,29 +1453,45 @@ box.innerHTML=list.map(x=>`
 <div>
 
 <div class="student-name">
-${esc(x.display_name||x.username||'User')}
+
+${esc(
+x.display_name||
+x.username||
+'User'
+)}
+
 </div>
+
 
 <div class="student-info">
+
 @${esc(x.username||'unknown')}
+
 &nbsp; • &nbsp;
+
 XP: ${x.xp||0}
+
 &nbsp; • &nbsp;
+
 Level: ${x.level||1}
+
 </div>
 
 </div>
+
 
 <div class="role ${
 x.role==='admin'
 ?'admin'
 :'student-role'
 }">
+
 ${
 x.role==='admin'
 ?'👑 ADMIN'
 :'🎓 STUDENT'
 }
+
 </div>
 
 </div>
@@ -1087,7 +1501,9 @@ x.role==='admin'
 }
 
 
-/* CLEAR FORM */
+/* =========================
+   CLEAR FORM
+========================= */
 
 function clearForm(){
 
@@ -1116,7 +1532,9 @@ document.getElementById('explanation').value='';
 }
 
 
-/* CLOSE */
+/* =========================
+   CLOSE MODAL
+========================= */
 
 function closeModal(){
 
@@ -1126,7 +1544,9 @@ document.getElementById('modal')
 }
 
 
-/* LOGOUT */
+/* =========================
+   LOGOUT
+========================= */
 
 async function logout(){
 
@@ -1137,44 +1557,63 @@ location.href='index.html';
 }
 
 
-/* MESSAGE */
+/* =========================
+   MESSAGE
+========================= */
 
 let timer;
 
+
 function show(text,error=false){
 
-const box=document.getElementById('message');
+const box=
+document.getElementById('message');
+
 
 box.textContent=text;
+
 
 box.className=
 'message show'+
 (error?' error':'');
 
+
 clearTimeout(timer);
 
+
 timer=setTimeout(()=>{
+
 box.classList.remove('show');
+
 },3500);
 
 }
 
 
-/* ESCAPE HTML */
+/* =========================
+   ESCAPE HTML
+========================= */
 
 function esc(value){
 
 return String(value??'')
+
 .replace(/&/g,'&amp;')
+
 .replace(/</g,'&lt;')
+
 .replace(/>/g,'&gt;')
+
 .replace(/"/g,'&quot;')
+
 .replace(/'/g,'&#039;');
 
 }
 
 
-/* START */
+/* =========================
+   START
+========================= */
 
 start();
 
