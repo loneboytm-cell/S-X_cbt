@@ -4,119 +4,679 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sᴍᴏᴋᴇ•X CBT — Login</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-:root{--cyan:#00e5ff;--purple:#8b5cf6;--bg:#05070d;--panel:#0b1020;--muted:#8fa3bd}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:radial-gradient(circle at 15% 15%,#17205a,transparent 32%),radial-gradient(circle at 85% 20%,#3b124c,transparent 30%),linear-gradient(135deg,#03050a,#080b16 55%,#05070d);color:#eef7ff;font-family:Arial,sans-serif;padding:20px}
-.card{width:min(420px,100%);background:#0b1020f5;border:1px solid #00e5ff44;border-radius:22px;padding:28px;box-shadow:0 20px 60px #000b,0 0 35px #00e5ff0d}
-.logo{text-align:center;font-size:30px;font-weight:1000;letter-spacing:1px;color:var(--cyan);text-shadow:0 0 18px #00e5ff55}.sub{text-align:center;color:var(--muted);margin:7px 0 25px}
-.tabs{display:flex;background:#070b14;border-radius:11px;padding:4px;margin-bottom:20px}.tab{flex:1;border:0;background:transparent;color:#8fa3bd;padding:11px;border-radius:8px;font-weight:800;cursor:pointer}.tab.active{background:#16243a;color:#fff;box-shadow:0 0 12px #00e5ff14}
-label{display:block;font-size:13px;font-weight:800;margin:14px 0 7px;color:#cbd8e8}input{width:100%;padding:13px 14px;background:#070c16;border:1px solid #33445e;border-radius:10px;color:white;outline:none;font-size:15px}input:focus{border-color:var(--cyan);box-shadow:0 0 12px #00e5ff18}
-.password{position:relative}.show{position:absolute;right:10px;top:9px;border:0;background:#162238;color:#9fb0c7;padding:7px 9px;border-radius:7px;cursor:pointer}
-.main{width:100%;border:0;border-radius:11px;padding:14px;margin-top:20px;background:linear-gradient(90deg,#00b8d9,#6d3df5);color:#fff;font-weight:1000;font-size:15px;cursor:pointer;box-shadow:0 0 20px #00e5ff22}.msg{text-align:center;margin-top:14px;min-height:20px;font-size:13px}.success{color:#38f59b}.error{color:#ff718d}.hidden{display:none}.foot{text-align:center;color:#64748b;font-size:11px;margin-top:20px}
+:root{
+  --cyan:#00e5ff;
+  --purple:#8b5cf6;
+  --bg:#05070d;
+  --panel:#0b1020;
+  --muted:#8fa3bd
+}
+
+*{
+  box-sizing:border-box
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle at 15% 15%,#17205a,transparent 32%),
+    radial-gradient(circle at 85% 20%,#3b124c,transparent 30%),
+    linear-gradient(135deg,#03050a,#080b16 55%,#05070d);
+  color:#eef7ff;
+  font-family:Arial,sans-serif;
+  padding:20px
+}
+
+.card{
+  width:min(420px,100%);
+  background:#0b1020f5;
+  border:1px solid #00e5ff44;
+  border-radius:22px;
+  padding:28px;
+  box-shadow:
+    0 20px 60px #000b,
+    0 0 35px #00e5ff0d
+}
+
+.logo{
+  text-align:center;
+  font-size:30px;
+  font-weight:1000;
+  letter-spacing:1px;
+  color:var(--cyan);
+  text-shadow:0 0 18px #00e5ff55
+}
+
+.sub{
+  text-align:center;
+  color:var(--muted);
+  margin:7px 0 25px
+}
+
+.tabs{
+  display:flex;
+  background:#070b14;
+  border-radius:11px;
+  padding:4px;
+  margin-bottom:20px
+}
+
+.tab{
+  flex:1;
+  border:0;
+  background:transparent;
+  color:#8fa3bd;
+  padding:11px;
+  border-radius:8px;
+  font-weight:800;
+  cursor:pointer
+}
+
+.tab.active{
+  background:#16243a;
+  color:#fff;
+  box-shadow:0 0 12px #00e5ff14
+}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:800;
+  margin:14px 0 7px;
+  color:#cbd8e8
+}
+
+input{
+  width:100%;
+  padding:13px 14px;
+  background:#070c16;
+  border:1px solid #33445e;
+  border-radius:10px;
+  color:white;
+  outline:none;
+  font-size:15px
+}
+
+input:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 12px #00e5ff18
+}
+
+.password{
+  position:relative
+}
+
+.show{
+  position:absolute;
+  right:10px;
+  top:9px;
+  border:0;
+  background:#162238;
+  color:#9fb0c7;
+  padding:7px 9px;
+  border-radius:7px;
+  cursor:pointer
+}
+
+.main{
+  width:100%;
+  border:0;
+  border-radius:11px;
+  padding:14px;
+  margin-top:20px;
+  background:linear-gradient(90deg,#00b8d9,#6d3df5);
+  color:#fff;
+  font-weight:1000;
+  font-size:15px;
+  cursor:pointer;
+  box-shadow:0 0 20px #00e5ff22
+}
+
+.main:disabled{
+  opacity:.6;
+  cursor:not-allowed
+}
+
+.msg{
+  text-align:center;
+  margin-top:14px;
+  min-height:20px;
+  font-size:13px
+}
+
+.success{
+  color:#38f59b
+}
+
+.error{
+  color:#ff718d
+}
+
+.hidden{
+  display:none
+}
+
+.foot{
+  text-align:center;
+  color:#64748b;
+  font-size:11px;
+  margin-top:20px
+}
 </style>
 </head>
+
 <body>
+
 <div class="card">
+
   <div class="logo">⚡ Sᴍᴏᴋᴇ•X</div>
-  <div class="sub">CBT EXAM PORTAL</div>
+
+  <div class="sub">
+    CBT EXAM PORTAL
+  </div>
 
   <div class="tabs">
-    <button class="tab active" id="loginTab" onclick="showMode('login')">LOGIN</button>
-    <button class="tab" id="registerTab" onclick="showMode('register')">CREATE ACCOUNT</button>
+
+    <button
+      class="tab active"
+      id="loginTab"
+      onclick="showMode('login')">
+      LOGIN
+    </button>
+
+    <button
+      class="tab"
+      id="registerTab"
+      onclick="showMode('register')">
+      CREATE ACCOUNT
+    </button>
+
   </div>
 
   <form id="form" onsubmit="submitForm(event)">
+
     <div id="nameBox" class="hidden">
+
       <label>FULL NAME</label>
-      <input id="name" autocomplete="name" placeholder="Your name">
+
+      <input
+        id="name"
+        autocomplete="name"
+        placeholder="Your name">
+
     </div>
 
     <label>EMAIL</label>
-    <input id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+
+    <input
+      id="email"
+      type="email"
+      autocomplete="email"
+      placeholder="you@example.com"
+      required>
 
     <label>PASSWORD</label>
+
     <div class="password">
-      <input id="password" type="password" minlength="6" autocomplete="current-password" placeholder="Minimum 6 characters" required>
-      <button class="show" type="button" onclick="togglePassword()">Show</button>
+
+      <input
+        id="password"
+        type="password"
+        minlength="6"
+        autocomplete="current-password"
+        placeholder="Minimum 6 characters"
+        required>
+
+      <button
+        class="show"
+        type="button"
+        onclick="togglePassword()">
+        Show
+      </button>
+
     </div>
 
     <div id="confirmBox" class="hidden">
+
       <label>CONFIRM PASSWORD</label>
-      <input id="confirm" type="password" minlength="6" placeholder="Repeat password">
+
+      <input
+        id="confirm"
+        type="password"
+        minlength="6"
+        placeholder="Repeat password">
+
     </div>
 
-    <button class="main" id="submitBtn">LOGIN TO CBT</button>
+    <button
+      class="main"
+      id="submitBtn">
+      LOGIN TO CBT
+    </button>
+
     <div id="msg" class="msg"></div>
+
   </form>
 
-  <div class="foot">Sᴍᴏᴋᴇ•X CBT • Online authentication</div>
+  <div class="foot">
+    Sᴍᴏᴋᴇ•X CBT • Online authentication
+  </div>
+
 </div>
 
 <script>
+
+/* =========================================
+   SUPABASE CONNECTION
+========================================= */
+
 const supabaseClient = supabase.createClient(
+
   'https://drpmzohaaoygnpyepzde.supabase.co',
+
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRycG16b2hhYW95Z25weWVwemRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMTM2MTcsImV4cCI6MjEwMTg4OTYxN30.MrGNejr7eyrk2l1CCn9xkehLB6_aGltYm9UOrf0XPbE'
+
 );
 
-let mode='login';
+
+/* =========================================
+   LOGIN / REGISTER MODE
+========================================= */
+
+let mode = 'login';
+
 
 function showMode(next){
-  mode=next;
-  const reg=mode==='register';
-  document.getElementById('loginTab').classList.toggle('active',!reg);
-  document.getElementById('registerTab').classList.toggle('active',reg);
-  document.getElementById('nameBox').classList.toggle('hidden',!reg);
-  document.getElementById('confirmBox').classList.toggle('hidden',!reg);
-  document.getElementById('submitBtn').textContent=reg?'CREATE ACCOUNT':'LOGIN TO CBT';
-  document.getElementById('password').autocomplete=reg?'new-password':'current-password';
+
+  mode = next;
+
+  const reg = mode === 'register';
+
+  document
+    .getElementById('loginTab')
+    .classList
+    .toggle('active', !reg);
+
+  document
+    .getElementById('registerTab')
+    .classList
+    .toggle('active', reg);
+
+  document
+    .getElementById('nameBox')
+    .classList
+    .toggle('hidden', !reg);
+
+  document
+    .getElementById('confirmBox')
+    .classList
+    .toggle('hidden', !reg);
+
+  document
+    .getElementById('submitBtn')
+    .textContent =
+      reg
+      ? 'CREATE ACCOUNT'
+      : 'LOGIN TO CBT';
+
+  document
+    .getElementById('password')
+    .autocomplete =
+      reg
+      ? 'new-password'
+      : 'current-password';
+
   clearMsg();
 }
+
+
+/* =========================================
+   PASSWORD SHOW / HIDE
+========================================= */
+
 function togglePassword(){
-  const p=document.getElementById('password'), b=document.querySelector('.show');
-  p.type=p.type==='password'?'text':'password'; b.textContent=p.type==='password'?'Show':'Hide';
+
+  const password =
+    document.getElementById('password');
+
+  const button =
+    document.querySelector('.show');
+
+  if(password.type === 'password'){
+
+    password.type = 'text';
+
+    button.textContent = 'Hide';
+
+  }else{
+
+    password.type = 'password';
+
+    button.textContent = 'Show';
+
+  }
+
 }
-function clearMsg(){document.getElementById('msg').textContent='';document.getElementById('msg').className='msg'}
-function msg(t,ok=false){const m=document.getElementById('msg');m.textContent=t;m.className='msg '+(ok?'success':'error')}
+
+
+/* =========================================
+   MESSAGES
+========================================= */
+
+function clearMsg(){
+
+  const message =
+    document.getElementById('msg');
+
+  message.textContent = '';
+
+  message.className = 'msg';
+
+}
+
+
+function msg(text, success = false){
+
+  const message =
+    document.getElementById('msg');
+
+  message.textContent = text;
+
+  message.className =
+    'msg ' +
+    (success ? 'success' : 'error');
+
+}
+
+
+/* =========================================
+   MAIN FORM
+========================================= */
 
 async function submitForm(e){
-  e.preventDefault(); clearMsg();
-  const email=document.getElementById('email').value.trim().toLowerCase();
-  const password=document.getElementById('password').value;
-  const btn=document.getElementById('submitBtn');
-  btn.disabled=true;
 
-  if(mode==='register'){
-    const name=document.getElementById('name').value.trim();
-    const confirm=document.getElementById('confirm').value;
-    if(!name){btn.disabled=false;return msg('Enter your name.');}
-    if(password.length<6){btn.disabled=false;return msg('Password must be at least 6 characters.');}
-    if(password!==confirm){btn.disabled=false;return msg('Passwords do not match.');}
+  e.preventDefault();
 
-    const {data, error} = await supabaseClient.auth.signUp({
-      email, password,
-      options:{ data:{ full_name:name } }
-    });
+  clearMsg();
 
-    btn.disabled=false;
-    if(error) return msg(error.message);
+  const email =
+    document
+      .getElementById('email')
+      .value
+      .trim()
+      .toLowerCase();
+
+  const password =
+    document
+      .getElementById('password')
+      .value;
+
+  const button =
+    document.getElementById('submitBtn');
+
+  button.disabled = true;
+
+
+  /* =====================================
+     REGISTER
+  ===================================== */
+
+  if(mode === 'register'){
+
+    const name =
+      document
+        .getElementById('name')
+        .value
+        .trim();
+
+    const confirm =
+      document
+        .getElementById('confirm')
+        .value;
+
+
+    if(!name){
+
+      button.disabled = false;
+
+      return msg('Enter your name.');
+
+    }
+
+
+    if(password.length < 6){
+
+      button.disabled = false;
+
+      return msg(
+        'Password must be at least 6 characters.'
+      );
+
+    }
+
+
+    if(password !== confirm){
+
+      button.disabled = false;
+
+      return msg(
+        'Passwords do not match.'
+      );
+
+    }
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.signUp({
+
+        email: email,
+
+        password: password,
+
+        options:{
+          data:{
+            full_name:name
+          }
+        }
+
+      });
+
+
+    button.disabled = false;
+
+
+    if(error){
+
+      return msg(error.message);
+
+    }
+
+
+    /*
+       If Supabase immediately gives us
+       a session, update the profile.
+    */
 
     if(data.session){
-      await supabaseClient.from('profiles').update({display_name:name}).eq('id', data.user.id);
-      msg('Account created! Opening CBT...',true);
-      setTimeout(()=>location.href='cbt.html',600);
+
+      await supabaseClient
+        .from('profiles')
+        .update({
+          display_name:name
+        })
+        .eq('id', data.user.id);
+
+
+      msg(
+        'Account created! Opening CBT...',
+        true
+      );
+
+
+      setTimeout(
+        () => {
+          location.href = 'cbt.html';
+        },
+        600
+      );
+
+
     }else{
-      msg('Account created! Check your email to confirm, then log in.',true);
+
+      msg(
+        'Account created! Check your email to confirm, then log in.',
+        true
+      );
+
       showMode('login');
+
     }
-  }else{
-    const {data, error} = await supabaseClient.auth.signInWithPassword({email, password});
-    btn.disabled=false;
-    if(error) return msg('Incorrect email or password.');
-    msg('Login successful! Opening CBT...',true);
-    setTimeout(()=>location.href='cbt.html',600);
+
+    return;
+
   }
+
+
+  /* =====================================
+     LOGIN
+  ===================================== */
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.signInWithPassword({
+
+      email: email,
+
+      password: password
+
+    });
+
+
+  button.disabled = false;
+
+
+  if(error){
+
+    return msg(
+      'Incorrect email or password.'
+    );
+
+  }
+
+
+  /* =====================================
+     GET LOGGED-IN USER
+  ===================================== */
+
+  const user = data.user;
+
+
+  if(!user){
+
+    return msg(
+      'Login failed. Please try again.'
+    );
+
+  }
+
+
+  /* =====================================
+     CHECK PROFILE ROLE
+  ===================================== */
+
+  const {
+    data: profile,
+    error: profileError
+  } =
+    await supabaseClient
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .maybeSingle();
+
+
+  /*
+     If the profile cannot be read,
+     do NOT give admin access.
+  */
+
+  if(profileError){
+
+    console.error(
+      'Profile role check failed:',
+      profileError
+    );
+
+    msg(
+      'Login successful, but your profile could not be checked.'
+    );
+
+    return;
+
+  }
+
+
+  /* =====================================
+     ADMIN LOGIN
+  ===================================== */
+
+  if(profile && profile.role === 'admin'){
+
+    msg(
+      'Admin login successful! Opening Admin Panel...',
+      true
+    );
+
+
+    setTimeout(
+      () => {
+
+        location.href = 'admin.html';
+
+      },
+      700
+    );
+
+
+    return;
+
+  }
+
+
+  /* =====================================
+     NORMAL USER LOGIN
+  ===================================== */
+
+  msg(
+    'Login successful! Opening CBT...',
+    true
+  );
+
+
+  setTimeout(
+    () => {
+
+      location.href = 'cbt.html';
+
+    },
+    700
+  );
+
 }
+
 </script>
+
 </body>
 </html>
