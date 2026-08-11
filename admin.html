@@ -3,532 +3,395 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sᴍᴏᴋᴇ•X Admin</title>
+<title>Sᴍᴏᴋᴇ•X Admin Panel</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-:root{
-  --bg:#05070d;
-  --panel:#0b1020;
-  --panel2:#10182b;
-  --cyan:#00e5ff;
-  --purple:#8b5cf6;
-  --green:#22c55e;
-  --red:#ff3b5c;
-  --yellow:#facc15;
-  --text:#eef7ff;
-  --muted:#8fa3bd;
-  --border:#263752;
-}
-
 *{box-sizing:border-box}
 
 body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at 10% 10%,#17205a 0,transparent 30%),
-    radial-gradient(circle at 90% 10%,#35104a 0,transparent 28%),
-    linear-gradient(135deg,#03050a,#080b16 55%,#05070d);
-  color:var(--text);
-  font-family:Arial,sans-serif;
+margin:0;
+font-family:Arial,sans-serif;
+background:#05070d;
+color:#fff;
+min-height:100vh
 }
 
-body:before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  background-image:
-    linear-gradient(#ffffff04 1px,transparent 1px),
-    linear-gradient(90deg,#ffffff04 1px,transparent 1px);
-  background-size:35px 35px;
+header{
+height:65px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 20px;
+background:#0b1020;
+border-bottom:1px solid #00e5ff33;
+position:sticky;
+top:0;
+z-index:10
 }
 
-/* TOP BAR */
-
-.top{
-  position:sticky;
-  top:0;
-  z-index:20;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:15px 20px;
-  background:#070b15ee;
-  border-bottom:1px solid #00e5ff33;
-  backdrop-filter:blur(15px);
-}
-
-.brand{
-  font-size:19px;
-  font-weight:1000;
-  letter-spacing:1px;
-}
-
-.brand span{
-  color:var(--cyan);
-  text-shadow:0 0 15px #00e5ff66;
-}
-
-.admin-badge{
-  color:#c4b5fd;
-  font-size:12px;
-  font-weight:900;
-  margin-left:8px;
+.logo{
+font-size:20px;
+font-weight:1000;
+color:#00e5ff
 }
 
 .logout{
-  border:1px solid #ff3b5c55;
-  background:#210b15;
-  color:#ff8096;
-  border-radius:9px;
-  padding:9px 13px;
-  font-weight:800;
-  cursor:pointer;
+border:0;
+background:#30101a;
+color:#ff718d;
+padding:10px 15px;
+border-radius:9px;
+font-weight:bold;
+cursor:pointer
 }
 
-/* LAYOUT */
-
 .layout{
-  display:flex;
-  min-height:calc(100vh - 65px);
+display:flex;
+min-height:calc(100vh - 65px)
 }
 
 .sidebar{
-  width:230px;
-  padding:20px 14px;
-  border-right:1px solid #ffffff0d;
-  background:#070b14aa;
+width:220px;
+background:#080c16;
+border-right:1px solid #ffffff12;
+padding:15px
 }
 
-.navbtn{
-  width:100%;
-  border:1px solid transparent;
-  background:transparent;
-  color:#8fa3bd;
-  padding:13px;
-  margin-bottom:7px;
-  border-radius:10px;
-  text-align:left;
-  font-weight:800;
-  cursor:pointer;
+.nav{
+width:100%;
+padding:13px;
+margin-bottom:8px;
+border:0;
+border-radius:9px;
+background:transparent;
+color:#8fa3bd;
+text-align:left;
+font-weight:bold;
+cursor:pointer
 }
 
-.navbtn:hover,
-.navbtn.active{
-  background:#102036;
-  color:white;
-  border-color:#00e5ff33;
-  box-shadow:0 0 18px #00e5ff0b;
+.nav:hover,.nav.active{
+background:#122139;
+color:#fff
 }
 
-.main{
-  flex:1;
-  padding:25px;
-  max-width:1400px;
+main{
+flex:1;
+padding:25px;
+max-width:1400px
 }
 
-/* SECTIONS */
-
-.section{
-  display:none;
+.page{
+display:none
 }
 
-.section.active{
-  display:block;
+.page.active{
+display:block
 }
 
-.page-title{
-  margin:0;
-  font-size:27px;
-  font-weight:1000;
+h1{
+margin:0 0 8px;
+font-size:28px
 }
 
-.page-sub{
-  margin:7px 0 25px;
-  color:var(--muted);
+.sub{
+color:#8fa3bd;
+margin-bottom:25px
 }
-
-/* STATS */
 
 .stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-  margin-bottom:25px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin-bottom:20px
 }
 
 .stat{
-  padding:20px;
-  border:1px solid #ffffff12;
-  border-radius:15px;
-  background:linear-gradient(145deg,#0c1424,#080d18);
-  box-shadow:0 12px 35px #0005;
+background:#0b1020;
+border:1px solid #ffffff12;
+border-radius:15px;
+padding:20px
 }
 
-.stat-label{
-  color:var(--muted);
-  font-size:12px;
-  font-weight:800;
+.stat small{
+color:#8fa3bd;
+font-weight:bold
 }
 
-.stat-number{
-  font-size:32px;
-  font-weight:1000;
-  margin-top:8px;
-  color:var(--cyan);
+.stat strong{
+display:block;
+font-size:32px;
+color:#00e5ff;
+margin-top:8px
 }
-
-/* CARDS */
 
 .card{
-  background:#0b1020e8;
-  border:1px solid #ffffff12;
-  border-radius:15px;
-  padding:20px;
-  margin-bottom:20px;
-  box-shadow:0 12px 35px #0005;
+background:#0b1020;
+border:1px solid #ffffff12;
+border-radius:15px;
+padding:20px;
+margin-bottom:20px
 }
 
-.card-title{
-  font-size:18px;
-  font-weight:900;
-  margin-bottom:15px;
-}
-
-/* BUTTONS */
-
-.btn{
-  border:0;
-  border-radius:9px;
-  padding:10px 14px;
-  font-weight:900;
-  cursor:pointer;
+button{
+font-family:inherit
 }
 
 .primary{
-  color:white;
-  background:linear-gradient(90deg,#00b8d9,#6d3df5);
+background:linear-gradient(90deg,#00b8d9,#6d3df5);
+color:#fff;
+border:0;
+border-radius:9px;
+padding:11px 15px;
+font-weight:bold;
+cursor:pointer
 }
 
-.green{
-  color:white;
-  background:#16a34a;
+.danger{
+background:#dc173c;
+color:#fff;
+border:0;
+border-radius:8px;
+padding:8px 11px;
+font-weight:bold;
+cursor:pointer
 }
 
-.red{
-  color:white;
-  background:#dc173c;
+.secondary{
+background:#182235;
+color:#fff;
+border:0;
+border-radius:8px;
+padding:8px 11px;
+font-weight:bold;
+cursor:pointer
 }
-
-.gray{
-  color:#dbe5f2;
-  background:#182235;
-}
-
-.small{
-  padding:7px 10px;
-  font-size:12px;
-}
-
-/* SEARCH */
 
 .toolbar{
-  display:flex;
-  gap:10px;
-  margin-bottom:15px;
-  flex-wrap:wrap;
+display:flex;
+gap:10px;
+margin-bottom:15px
 }
 
-.search{
-  flex:1;
-  min-width:200px;
-}
-
-/* INPUTS */
-
-input,
-textarea,
-select{
-  width:100%;
-  background:#070c16;
-  color:white;
-  border:1px solid #33445e;
-  border-radius:9px;
-  padding:12px;
-  outline:none;
-  font:inherit;
+input,textarea,select{
+width:100%;
+background:#070c16;
+border:1px solid #33445e;
+border-radius:9px;
+padding:12px;
+color:#fff;
+outline:none
 }
 
 textarea{
-  min-height:110px;
-  resize:vertical;
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-  border-color:var(--cyan);
-  box-shadow:0 0 12px #00e5ff18;
+min-height:100px;
+resize:vertical
 }
 
 label{
-  display:block;
-  color:#cbd8e8;
-  font-size:12px;
-  font-weight:900;
-  margin:13px 0 6px;
+display:block;
+font-size:12px;
+font-weight:bold;
+color:#b9c8da;
+margin:12px 0 6px
 }
 
-/* QUESTIONS */
-
-.question-item{
-  border:1px solid #ffffff12;
-  border-radius:13px;
-  padding:17px;
-  margin-bottom:12px;
-  background:#080e1b;
+.question{
+background:#080e1a;
+border:1px solid #ffffff12;
+border-radius:12px;
+padding:16px;
+margin-bottom:10px
 }
 
-.q-head{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  align-items:flex-start;
+.question-title{
+font-weight:bold;
+line-height:1.5;
+margin-bottom:10px
 }
 
-.q-number{
-  color:var(--cyan);
-  font-size:12px;
-  font-weight:900;
-}
-
-.q-text{
-  margin-top:7px;
-  line-height:1.5;
-  font-weight:700;
-}
-
-.q-meta{
-  display:flex;
-  gap:7px;
-  flex-wrap:wrap;
-  margin-top:12px;
+.tags{
+display:flex;
+gap:6px;
+flex-wrap:wrap;
+margin-bottom:12px
 }
 
 .tag{
-  padding:5px 8px;
-  border-radius:7px;
-  background:#111c30;
-  color:#9fb0c7;
-  font-size:11px;
-  font-weight:800;
+background:#142035;
+color:#9fb0c7;
+padding:5px 8px;
+border-radius:6px;
+font-size:11px
 }
 
-.q-actions{
-  display:flex;
-  gap:7px;
-  flex-shrink:0;
+.actions{
+display:flex;
+gap:7px
 }
-
-/* MODAL */
-
-.modal-bg{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:100;
-  background:#000b;
-  backdrop-filter:blur(7px);
-  padding:20px;
-  overflow:auto;
-}
-
-.modal-bg.show{
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
-}
-
-.modal{
-  width:min(720px,100%);
-  margin:20px auto;
-  background:#0b1020;
-  border:1px solid #00e5ff33;
-  border-radius:18px;
-  padding:22px;
-  box-shadow:0 25px 80px #000c;
-}
-
-.modal-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:15px;
-}
-
-.close{
-  border:0;
-  background:#1b2538;
-  color:white;
-  border-radius:8px;
-  padding:8px 11px;
-  cursor:pointer;
-  font-weight:900;
-}
-
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.full{
-  grid-column:1/-1;
-}
-
-.form-actions{
-  display:flex;
-  justify-content:flex-end;
-  gap:8px;
-  margin-top:18px;
-}
-
-/* STUDENTS */
 
 .student{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  padding:15px;
-  border:1px solid #ffffff10;
-  border-radius:11px;
-  margin-bottom:9px;
-  background:#080e1a;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px;
+margin-bottom:8px;
+background:#080e1a;
+border:1px solid #ffffff12;
+border-radius:10px
 }
 
 .student-name{
-  font-weight:900;
+font-weight:bold
 }
 
 .student-info{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:4px;
+color:#8fa3bd;
+font-size:12px;
+margin-top:4px
 }
 
 .role{
-  padding:5px 9px;
-  border-radius:7px;
-  font-size:11px;
-  font-weight:900;
+padding:6px 9px;
+border-radius:7px;
+font-size:11px;
+font-weight:bold
 }
 
-.role.admin{
-  background:#32166a;
-  color:#d8b4fe;
+.admin{
+background:#32166a;
+color:#d8b4fe
 }
 
-.role.student{
-  background:#102d22;
-  color:#62f5a3;
+.student-role{
+background:#103023;
+color:#67f59f
 }
 
-/* MESSAGE */
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:#000c;
+z-index:50;
+padding:20px;
+overflow:auto
+}
+
+.modal.show{
+display:flex;
+justify-content:center;
+align-items:flex-start
+}
+
+.modal-box{
+width:min(700px,100%);
+background:#0b1020;
+border:1px solid #00e5ff44;
+border-radius:16px;
+padding:22px;
+margin-top:30px
+}
+
+.modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center
+}
+
+.close{
+border:0;
+background:#182235;
+color:#fff;
+border-radius:7px;
+padding:8px 11px;
+cursor:pointer
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px
+}
+
+.full{
+grid-column:1/-1
+}
+
+.form-buttons{
+display:flex;
+justify-content:flex-end;
+gap:8px;
+margin-top:15px
+}
 
 .message{
-  position:fixed;
-  right:18px;
-  bottom:18px;
-  z-index:200;
-  padding:13px 16px;
-  border-radius:10px;
-  background:#10182b;
-  border:1px solid #00e5ff44;
-  box-shadow:0 15px 40px #0009;
-  display:none;
-  max-width:320px;
-  font-size:13px;
-  font-weight:800;
+position:fixed;
+bottom:20px;
+right:20px;
+background:#10182b;
+border:1px solid #00e5ff55;
+padding:13px 17px;
+border-radius:9px;
+display:none;
+z-index:100;
+font-weight:bold
 }
 
 .message.show{
-  display:block;
+display:block
 }
 
 .message.error{
-  border-color:#ff3b5c66;
-  color:#ff8ba4;
+border-color:#ff3b5c;
+color:#ff718d
 }
 
-.message.success{
-  border-color:#22c55e66;
-  color:#67f59f;
+@media(max-width:750px){
+
+.layout{
+display:block
 }
 
-/* MOBILE */
+.sidebar{
+width:100%;
+display:flex;
+overflow-x:auto;
+gap:5px
+}
 
-@media(max-width:800px){
+.nav{
+white-space:nowrap;
+width:auto
+}
 
-  .layout{
-    display:block;
-  }
+main{
+padding:15px
+}
 
-  .sidebar{
-    width:100%;
-    display:flex;
-    gap:7px;
-    overflow-x:auto;
-    border-right:0;
-    border-bottom:1px solid #ffffff0d;
-    padding:10px;
-  }
+.stats{
+grid-template-columns:1fr
+}
 
-  .navbtn{
-    width:auto;
-    white-space:nowrap;
-    margin:0;
-  }
+.grid{
+grid-template-columns:1fr
+}
 
-  .main{
-    padding:16px;
-  }
+.full{
+grid-column:auto
+}
 
-  .stats{
-    grid-template-columns:1fr;
-  }
+.toolbar{
+flex-wrap:wrap
+}
 
-  .form-grid{
-    grid-template-columns:1fr;
-  }
-
-  .full{
-    grid-column:auto;
-  }
-
-  .q-head{
-    display:block;
-  }
-
-  .q-actions{
-    margin-top:12px;
-  }
-
-  .student{
-    align-items:flex-start;
-    flex-direction:column;
-  }
-
-  .top{
-    padding:13px;
-  }
-
-  .brand{
-    font-size:15px;
-  }
+.student{
+align-items:flex-start;
+gap:10px;
+flex-direction:column
+}
 
 }
 </style>
@@ -536,311 +399,221 @@ label{
 
 <body>
 
-<header class="top">
-  <div class="brand">
-    ⚡ <span>Sᴍᴏᴋᴇ•X</span> ADMIN
-    <span class="admin-badge">👑 ADMINISTRATOR</span>
-  </div>
-
-  <button class="logout" onclick="logout()">LOGOUT</button>
+<header>
+<div class="logo">⚡ Sᴍᴏᴋᴇ•X ADMIN 👑</div>
+<button class="logout" onclick="logout()">LOGOUT</button>
 </header>
 
 <div class="layout">
 
-  <aside class="sidebar">
+<aside class="sidebar">
 
-    <button class="navbtn active" onclick="showSection('dashboard',this)">
-      📊 Dashboard
-    </button>
+<button class="nav active" onclick="page('dashboard',this)">
+📊 Dashboard
+</button>
 
-    <button class="navbtn" onclick="showSection('questions',this)">
-      📝 Questions
-    </button>
+<button class="nav" onclick="page('questions',this)">
+📝 Questions
+</button>
 
-    <button class="navbtn" onclick="showSection('students',this)">
-      👥 Students
-    </button>
+<button class="nav" onclick="page('students',this)">
+👥 Students
+</button>
 
-  </aside>
+</aside>
 
-  <main class="main">
+<main>
 
-    <!-- DASHBOARD -->
+<!-- DASHBOARD -->
 
-    <section id="dashboard" class="section active">
+<section id="dashboard" class="page active">
 
-      <h1 class="page-title">Admin Dashboard</h1>
+<h1>Admin Dashboard</h1>
 
-      <p class="page-sub">
-        Welcome back, administrator. Manage your Sᴍᴏᴋᴇ•X CBT system from here.
-      </p>
+<div class="sub">
+Welcome to the Sᴍᴏᴋᴇ•X CBT control panel.
+</div>
 
-      <div class="stats">
+<div class="stats">
 
-        <div class="stat">
-          <div class="stat-label">REGISTERED STUDENTS</div>
-          <div class="stat-number" id="studentCount">0</div>
-        </div>
+<div class="stat">
+<small>STUDENTS</small>
+<strong id="studentCount">0</strong>
+</div>
 
-        <div class="stat">
-          <div class="stat-label">EXAM QUESTIONS</div>
-          <div class="stat-number" id="questionCount">0</div>
-        </div>
+<div class="stat">
+<small>QUESTIONS</small>
+<strong id="questionCount">0</strong>
+</div>
 
-        <div class="stat">
-          <div class="stat-label">ADMIN ACCOUNTS</div>
-          <div class="stat-number" id="adminCount">0</div>
-        </div>
+<div class="stat">
+<small>ADMINS</small>
+<strong id="adminCount">0</strong>
+</div>
 
-      </div>
+</div>
 
-      <div class="card">
+<div class="card">
 
-        <div class="card-title">
-          ⚡ Quick Actions
-        </div>
+<h3>Quick Actions</h3>
 
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
+<button class="primary" onclick="openAdd()">
+➕ Add Question
+</button>
 
-          <button class="btn primary" onclick="openQuestionModal()">
-            ➕ Add Question
-          </button>
+</div>
 
-          <button class="btn gray" onclick="showSectionById('questions')">
-            📝 Manage Questions
-          </button>
-
-          <button class="btn gray" onclick="showSectionById('students')">
-            👥 View Students
-          </button>
-
-        </div>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-title">
-          🔐 Security Status
-        </div>
-
-        <div style="color:#67f59f;font-weight:900">
-          ● Admin authentication active
-        </div>
-
-        <p style="color:var(--muted);font-size:13px;line-height:1.6">
-          This dashboard checks your Supabase account's role before allowing access.
-          Students cannot use the admin question-management functions.
-        </p>
-
-      </div>
-
-    </section>
+</section>
 
 
-    <!-- QUESTIONS -->
+<!-- QUESTIONS -->
 
-    <section id="questions" class="section">
+<section id="questions" class="page">
 
-      <h1 class="page-title">Question Manager</h1>
+<h1>Question Manager</h1>
 
-      <p class="page-sub">
-        Add, edit and delete CBT questions.
-      </p>
+<div class="sub">
+Create and manage CBT questions.
+</div>
 
-      <div class="toolbar">
+<div class="toolbar">
 
-        <input
-          class="search"
-          id="questionSearch"
-          placeholder="Search questions..."
-          oninput="renderQuestions()"
-        >
+<input
+id="search"
+placeholder="Search questions..."
+oninput="renderQuestions()">
 
-        <button class="btn primary" onclick="openQuestionModal()">
-          ➕ Add Question
-        </button>
+<button class="primary" onclick="openAdd()">
+➕ Add Question
+</button>
 
-        <button class="btn gray" onclick="loadQuestions()">
-          🔄 Refresh
-        </button>
+</div>
 
-      </div>
+<div id="questionList"></div>
 
-      <div id="questionsList"></div>
-
-    </section>
+</section>
 
 
-    <!-- STUDENTS -->
+<!-- STUDENTS -->
 
-    <section id="students" class="section">
+<section id="students" class="page">
 
-      <h1 class="page-title">Student Management</h1>
+<h1>Students</h1>
 
-      <p class="page-sub">
-        View registered CBT users and their account roles.
-      </p>
+<div class="sub">
+View registered users and account roles.
+</div>
 
-      <div class="toolbar">
+<div class="toolbar">
 
-        <input
-          class="search"
-          id="studentSearch"
-          placeholder="Search students..."
-          oninput="renderStudents()"
-        >
+<input
+id="studentSearch"
+placeholder="Search students..."
+oninput="renderStudents()">
 
-        <button class="btn gray" onclick="loadStudents()">
-          🔄 Refresh
-        </button>
+</div>
 
-      </div>
+<div id="studentList"></div>
 
-      <div id="studentsList"></div>
+</section>
 
-    </section>
-
-  </main>
+</main>
 </div>
 
 
 <!-- QUESTION MODAL -->
 
-<div class="modal-bg" id="questionModal">
+<div class="modal" id="modal">
 
-  <div class="modal">
+<div class="modal-box">
 
-    <div class="modal-head">
+<div class="modal-head">
 
-      <div class="card-title" id="modalTitle">
-        Add Question
-      </div>
+<h2 id="modalTitle">Add Question</h2>
 
-      <button class="close" onclick="closeQuestionModal()">✕</button>
+<button class="close" onclick="closeModal()">✕</button>
 
-    </div>
+</div>
 
-    <input type="hidden" id="editId">
+<input type="hidden" id="editId">
 
-    <div class="form-grid">
+<div class="grid">
 
-      <div>
-        <label>SUBJECT</label>
-        <input id="fSubject" placeholder="e.g. Physics">
-      </div>
+<div>
+<label>SUBJECT</label>
+<input id="subject" placeholder="Physics">
+</div>
 
-      <div>
-        <label>TOPIC</label>
-        <input id="fTopic" placeholder="e.g. Electricity">
-      </div>
+<div>
+<label>TOPIC</label>
+<input id="topic" placeholder="Electricity">
+</div>
 
-      <div class="full">
+<div class="full">
+<label>QUESTION</label>
+<textarea id="question" placeholder="Enter question"></textarea>
+</div>
 
-        <label>QUESTION</label>
+<div>
+<label>OPTION A</label>
+<input id="a">
+</div>
 
-        <textarea
-          id="fQuestion"
-          placeholder="Enter the question here..."
-        ></textarea>
+<div>
+<label>OPTION B</label>
+<input id="b">
+</div>
 
-      </div>
+<div>
+<label>OPTION C</label>
+<input id="c">
+</div>
 
-      <div>
+<div>
+<label>OPTION D</label>
+<input id="d">
+</div>
 
-        <label>OPTION A</label>
+<div>
+<label>CORRECT ANSWER</label>
+<select id="answer">
+<option value="">Select answer</option>
+<option value="A">A</option>
+<option value="B">B</option>
+<option value="C">C</option>
+<option value="D">D</option>
+</select>
+</div>
 
-        <input id="fA" placeholder="Option A">
+<div>
+<label>DIFFICULTY</label>
+<select id="difficulty">
+<option value="easy">Easy</option>
+<option value="medium" selected>Medium</option>
+<option value="hard">Hard</option>
+</select>
+</div>
 
-      </div>
+<div class="full">
+<label>EXPLANATION</label>
+<textarea id="explanation" placeholder="Explain the correct answer"></textarea>
+</div>
 
-      <div>
+</div>
 
-        <label>OPTION B</label>
+<div class="form-buttons">
 
-        <input id="fB" placeholder="Option B">
+<button class="secondary" onclick="closeModal()">
+Cancel
+</button>
 
-      </div>
+<button class="primary" id="saveBtn" onclick="saveQuestion()">
+Save Question
+</button>
 
-      <div>
+</div>
 
-        <label>OPTION C</label>
-
-        <input id="fC" placeholder="Option C">
-
-      </div>
-
-      <div>
-
-        <label>OPTION D</label>
-
-        <input id="fD" placeholder="Option D">
-
-      </div>
-
-      <div>
-
-        <label>CORRECT ANSWER</label>
-
-        <select id="fAnswer">
-
-          <option value="">Select correct option</option>
-
-          <option value="A">A</option>
-
-          <option value="B">B</option>
-
-          <option value="C">C</option>
-
-          <option value="D">D</option>
-
-        </select>
-
-      </div>
-
-      <div>
-
-        <label>DIFFICULTY</label>
-
-        <select id="fDifficulty">
-
-          <option value="easy">Easy</option>
-
-          <option value="medium" selected>Medium</option>
-
-          <option value="hard">Hard</option>
-
-        </select>
-
-      </div>
-
-      <div class="full">
-
-        <label>EXPLANATION</label>
-
-        <textarea
-          id="fExplanation"
-          placeholder="Explain why the answer is correct..."
-        ></textarea>
-
-      </div>
-
-    </div>
-
-    <div class="form-actions">
-
-      <button class="btn gray" onclick="closeQuestionModal()">
-        Cancel
-      </button>
-
-      <button class="btn primary" id="saveQuestionBtn" onclick="saveQuestion()">
-        Save Question
-      </button>
-
-    </div>
-
-  </div>
-
+</div>
 </div>
 
 
@@ -849,328 +622,563 @@ label{
 
 <script>
 
-/* =========================================
-   SUPABASE CONNECTION
-========================================= */
-
 const supabaseClient = supabase.createClient(
-  'https://drpmzohaaoygnpyepzde.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRycG16b2hhYW95Z25weWVwemRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMTM2MTcsImV4cCI6MjEwMTg4OTYxN30.MrGNejr7eyrk2l1CCn9xkehLB6_aGltYm9UOrf0XPbE'
+'https://drpmzohaaoygnpyepzde.supabase.co',
+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJkcnBtem9oYWFveWducHllcHpkZSIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzg2MzEzNjE3LCJleHAiOjIxMDE4ODk2MTl9.MrGNejr7eyrk2l1CCn9xkehLB6_aGltYm9UOrf0XPbE'
 );
 
-
-/* =========================================
-   GLOBAL DATA
-========================================= */
-
-let questions = [];
-let students = [];
+let questions=[];
+let students=[];
 
 
-/* =========================================
-   START
-========================================= */
+/* CHECK ADMIN */
 
-window.addEventListener('DOMContentLoaded', startAdmin);
+async function start(){
 
-async function startAdmin(){
+const {
+data:{session}
+}=await supabaseClient.auth.getSession();
 
-  const {
-    data:{session}
-  } = await supabaseClient.auth.getSession();
+if(!session){
+location.href='index.html';
+return;
+}
 
-  if(!session){
+const {data:isAdmin,error}=await supabaseClient.rpc('is_admin');
 
-    location.href='index.html';
+if(error || isAdmin !== true){
 
-    return;
-  }
+alert('Access denied. Admin account required.');
 
-  const {
-    data:isAdmin,
-    error:adminError
-  } = await supabaseClient.rpc('is_admin');
+await supabaseClient.auth.signOut();
 
-  if(adminError || !isAdmin){
+location.href='index.html';
 
-    alert('Access denied. Admin account required.');
+return;
+}
 
-    await supabaseClient.auth.signOut();
-
-    location.href='index.html';
-
-    return;
-  }
-
-  await loadDashboard();
+loadQuestions();
+loadStudents();
 
 }
 
 
-/* =========================================
-   DASHBOARD
-========================================= */
+/* NAVIGATION */
 
-async function loadDashboard(){
+function page(id,button){
 
-  await Promise.all([
-    loadQuestions(),
-    loadStudents()
-  ]);
+document.querySelectorAll('.page').forEach(x=>{
+x.classList.remove('active')
+});
 
-}
+document.getElementById(id).classList.add('active');
 
+document.querySelectorAll('.nav').forEach(x=>{
+x.classList.remove('active')
+});
 
-/* =========================================
-   NAVIGATION
-========================================= */
-
-function showSection(id,button){
-
-  document.querySelectorAll('.section').forEach(section=>{
-    section.classList.remove('active');
-  });
-
-  document.getElementById(id).classList.add('active');
-
-  document.querySelectorAll('.navbtn').forEach(btn=>{
-    btn.classList.remove('active');
-  });
-
-  if(button){
-    button.classList.add('active');
-  }
-
-}
-
-function showSectionById(id){
-
-  const buttons=document.querySelectorAll('.navbtn');
-
-  buttons.forEach(button=>{
-
-    const text=button.textContent.toLowerCase();
-
-    if(
-      (id==='dashboard' && text.includes('dashboard')) ||
-      (id==='questions' && text.includes('questions')) ||
-      (id==='students' && text.includes('students'))
-    ){
-      showSection(id,button);
-    }
-
-  });
+button.classList.add('active');
 
 }
 
 
-/* =========================================
-   LOAD QUESTIONS
-========================================= */
+/* QUESTIONS */
 
 async function loadQuestions(){
 
-  const {
-    data,
-    error
-  } = await supabaseClient
-    .from('questions')
-    .select('*')
-    .order('created_at',{ascending:false});
+const {data,error}=await supabaseClient
+.from('questions')
+.select('*')
+.order('created_at',{ascending:false});
 
-  if(error){
+if(error){
+show(error.message,true);
+return;
+}
 
-    showMessage('Could not load questions: '+error.message,true);
+questions=data||[];
 
-    return;
-  }
+document.getElementById('questionCount').textContent=questions.length;
 
-  questions=data || [];
-
-  document.getElementById('questionCount').textContent=questions.length;
-
-  renderQuestions();
+renderQuestions();
 
 }
 
-
-/* =========================================
-   RENDER QUESTIONS
-========================================= */
 
 function renderQuestions(){
 
-  const box=document.getElementById('questionsList');
+const box=document.getElementById('questionList');
 
-  const search=(document.getElementById('questionSearch')?.value || '')
-    .toLowerCase()
-    .trim();
+const search=
+(document.getElementById('search').value||'')
+.toLowerCase();
 
-  let list=questions.filter(q=>{
+const list=questions.filter(q=>{
 
-    const text=[
-      q.subject,
-      q.topic,
-      q.question,
-      q.option_a,
-      q.option_b,
-      q.option_c,
-      q.option_d
-    ].join(' ').toLowerCase();
+return [
+q.subject,
+q.topic,
+q.question,
+q.option_a,
+q.option_b,
+q.option_c,
+q.option_d
+]
+.join(' ')
+.toLowerCase()
+.includes(search);
 
-    return text.includes(search);
+});
 
-  });
 
-  if(!list.length){
+if(!list.length){
 
-    box.innerHTML=`
-      <div class="card" style="text-align:center;color:#8fa3bd">
-        No questions found.
-      </div>
-    `;
+box.innerHTML=`
+<div class="card">
+No questions found.
+</div>
+`;
 
-    return;
-  }
+return;
+}
 
-  box.innerHTML=list.map((q,index)=>{
 
-    const answer=getCorrectAnswerText(q);
+box.innerHTML=list.map((q,i)=>`
 
-    return `
+<div class="question">
 
-      <div class="question-item">
+<div class="question-title">
+${i+1}. ${esc(q.question)}
+</div>
 
-        <div class="q-head">
+<div class="tags">
 
-          <div style="flex:1">
+<span class="tag">${esc(q.subject||'No subject')}</span>
 
-            <div class="q-number">
-              QUESTION ${index+1}
-            </div>
+<span class="tag">${esc(q.topic||'No topic')}</span>
 
-            <div class="q-text">
-              ${escapeHtml(q.question || '')}
-            </div>
+<span class="tag">
+Difficulty: ${esc(q.difficulty||'medium')}
+</span>
 
-            <div class="q-meta">
+<span class="tag">
+Answer: ${esc(q.correct_answer||'')}
+</span>
 
-              <span class="tag">
-                ${escapeHtml(q.subject || 'No subject')}
-              </span>
+</div>
 
-              <span class="tag">
-                ${escapeHtml(q.topic || 'No topic')}
-              </span>
+<div class="actions">
 
-              <span class="tag">
-                ${escapeHtml(q.difficulty || 'medium')}
-              </span>
+<button class="secondary"
+onclick="editQuestion('${q.id}')">
+✏️ Edit
+</button>
 
-              <span class="tag">
-                ✓ ${escapeHtml(answer)}
-              </span>
+<button class="danger"
+onclick="deleteQuestion('${q.id}')">
+🗑️ Delete
+</button>
 
-            </div>
+</div>
 
-          </div>
+</div>
 
-          <div class="q-actions">
-
-            <button
-              class="btn gray small"
-              onclick="editQuestion('${q.id}')"
-            >
-              ✏️ Edit
-            </button>
-
-            <button
-              class="btn red small"
-              onclick="deleteQuestion('${q.id}')"
-            >
-              🗑️ Delete
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    `;
-
-  }).join('');
+`).join('');
 
 }
 
 
-/* =========================================
-   CORRECT ANSWER
-========================================= */
+/* OPEN ADD */
 
-function getCorrectAnswerText(q){
+function openAdd(){
 
-  const answer=(q.correct_answer || '').toString().trim();
+clearForm();
 
-  if(answer==='A') return 'A: '+(q.option_a || '');
-  if(answer==='B') return 'B: '+(q.option_b || '');
-  if(answer==='C') return 'C: '+(q.option_c || '');
-  if(answer==='D') return 'D: '+(q.option_d || '');
+document.getElementById('modalTitle').textContent=
+'Add Question';
 
-  return answer || 'Not set';
+document.getElementById('saveBtn').textContent=
+'Save Question';
 
-}
-
-
-/* =========================================
-   QUESTION MODAL
-========================================= */
-
-function openQuestionModal(){
-
-  clearQuestionForm();
-
-  document.getElementById('modalTitle').textContent='Add Question';
-
-  document.getElementById('saveQuestionBtn').textContent='Save Question';
-
-  document.getElementById('questionModal').classList.add('show');
-
-}
-
-function closeQuestionModal(){
-
-  document.getElementById('questionModal').classList.remove('show');
-
-}
-
-function clearQuestionForm(){
-
-  document.getElementById('editId').value='';
-  document.getElementById('fSubject').value='';
-  document.getElementById('fTopic').value='';
-  document.getElementById('fQuestion').value='';
-  document.getElementById('fA').value='';
-  document.getElementById('fB').value='';
-  document.getElementById('fC').value='';
-  document.getElementById('fD').value='';
-  document.getElementById('fAnswer').value='';
-  document.getElementById('fDifficulty').value='medium';
-  document.getElementById('fExplanation').value='';
+document.getElementById('modal').classList.add('show');
 
 }
 
 
-/* =========================================
-   EDIT QUESTION
-========================================= */
+/* EDIT */
 
 function editQuestion(id){
 
-  const q=questions.find(item=>item.id===id);
+const q=questions.find(x=>x.id===id);
 
-  if(!q) return;
+if(!q)return;
 
-  document.getElementById('editId').value=q.id;
-  document.getElementById('fSubject').value=q.subject || '';
-  docu
+document.getElementById('editId').value=q.id;
+
+document.getElementById('subject').value=q.subject||'';
+
+document.getElementById('topic').value=q.topic||'';
+
+document.getElementById('question').value=q.question||'';
+
+document.getElementById('a').value=q.option_a||'';
+
+document.getElementById('b').value=q.option_b||'';
+
+document.getElementById('c').value=q.option_c||'';
+
+document.getElementById('d').value=q.option_d||'';
+
+document.getElementById('answer').value=q.correct_answer||'';
+
+document.getElementById('difficulty').value=
+q.difficulty||'medium';
+
+document.getElementById('explanation').value=
+q.explanation||'';
+
+document.getElementById('modalTitle').textContent=
+'Edit Question';
+
+document.getElementById('saveBtn').textContent=
+'Update Question';
+
+document.getElementById('modal').classList.add('show');
+
+}
+
+
+/* SAVE */
+
+async function saveQuestion(){
+
+const id=document.getElementById('editId').value;
+
+const payload={
+
+subject:document.getElementById('subject').value.trim(),
+
+topic:document.getElementById('topic').value.trim(),
+
+question:document.getElementById('question').value.trim(),
+
+option_a:document.getElementById('a').value.trim(),
+
+option_b:document.getElementById('b').value.trim(),
+
+option_c:document.getElementById('c').value.trim(),
+
+option_d:document.getElementById('d').value.trim(),
+
+correct_answer:document.getElementById('answer').value,
+
+difficulty:document.getElementById('difficulty').value,
+
+explanation:document.getElementById('explanation').value.trim()
+
+};
+
+
+if(
+!payload.subject ||
+!payload.question ||
+!payload.option_a ||
+!payload.option_b ||
+!payload.option_c ||
+!payload.option_d ||
+!payload.correct_answer
+){
+
+show('Fill all required question fields.',true);
+return;
+
+}
+
+
+const button=document.getElementById('saveBtn');
+
+button.disabled=true;
+
+let error;
+
+
+if(id){
+
+const result=await supabaseClient
+.from('questions')
+.update(payload)
+.eq('id',id);
+
+error=result.error;
+
+}else{
+
+const result=await supabaseClient
+.from('questions')
+.insert(payload);
+
+error=result.error;
+
+}
+
+
+button.disabled=false;
+
+
+if(error){
+
+show(error.message,true);
+return;
+
+}
+
+
+closeModal();
+
+show(
+id
+?'Question updated successfully!'
+:'Question added successfully!'
+);
+
+loadQuestions();
+
+}
+
+
+/* DELETE */
+
+async function deleteQuestion(id){
+
+if(!confirm(
+'Are you sure you want to delete this question?'
+))return;
+
+
+const {error}=await supabaseClient
+.from('questions')
+.delete()
+.eq('id',id);
+
+
+if(error){
+
+show(error.message,true);
+return;
+
+}
+
+
+show('Question deleted.');
+
+loadQuestions();
+
+}
+
+
+/* STUDENTS */
+
+async function loadStudents(){
+
+const {data,error}=await supabaseClient
+.from('profiles')
+.select(
+'id,username,display_name,role,xp,level,created_at'
+)
+.order('created_at',{ascending:false});
+
+
+if(error){
+
+show(error.message,true);
+return;
+
+}
+
+
+students=data||[];
+
+const normal=students.filter(
+x=>x.role!=='admin'
+).length;
+
+const admins=students.filter(
+x=>x.role==='admin'
+).length;
+
+document.getElementById('studentCount').textContent=normal;
+
+document.getElementById('adminCount').textContent=admins;
+
+renderStudents();
+
+}
+
+
+function renderStudents(){
+
+const box=document.getElementById('studentList');
+
+const search=
+(document.getElementById('studentSearch').value||'')
+.toLowerCase();
+
+
+const list=students.filter(x=>{
+
+return [
+x.username,
+x.display_name,
+x.role
+]
+.join(' ')
+.toLowerCase()
+.includes(search);
+
+});
+
+
+if(!list.length){
+
+box.innerHTML=
+'<div class="card">No users found.</div>';
+
+return;
+
+}
+
+
+box.innerHTML=list.map(x=>`
+
+<div class="student">
+
+<div>
+
+<div class="student-name">
+${esc(x.display_name||x.username||'User')}
+</div>
+
+<div class="student-info">
+@${esc(x.username||'unknown')}
+&nbsp; • &nbsp;
+XP: ${x.xp||0}
+&nbsp; • &nbsp;
+Level: ${x.level||1}
+</div>
+
+</div>
+
+<div class="role ${
+x.role==='admin'
+?'admin'
+:'student-role'
+}">
+${
+x.role==='admin'
+?'👑 ADMIN'
+:'🎓 STUDENT'
+}
+</div>
+
+</div>
+
+`).join('');
+
+}
+
+
+/* CLEAR FORM */
+
+function clearForm(){
+
+document.getElementById('editId').value='';
+
+document.getElementById('subject').value='';
+
+document.getElementById('topic').value='';
+
+document.getElementById('question').value='';
+
+document.getElementById('a').value='';
+
+document.getElementById('b').value='';
+
+document.getElementById('c').value='';
+
+document.getElementById('d').value='';
+
+document.getElementById('answer').value='';
+
+document.getElementById('difficulty').value='medium';
+
+document.getElementById('explanation').value='';
+
+}
+
+
+/* CLOSE */
+
+function closeModal(){
+
+document.getElementById('modal')
+.classList.remove('show');
+
+}
+
+
+/* LOGOUT */
+
+async function logout(){
+
+await supabaseClient.auth.signOut();
+
+location.href='index.html';
+
+}
+
+
+/* MESSAGE */
+
+let timer;
+
+function show(text,error=false){
+
+const box=document.getElementById('message');
+
+box.textContent=text;
+
+box.className=
+'message show'+
+(error?' error':'');
+
+clearTimeout(timer);
+
+timer=setTimeout(()=>{
+box.classList.remove('show');
+},3500);
+
+}
+
+
+/* ESCAPE HTML */
+
+function esc(value){
+
+return String(value??'')
+.replace(/&/g,'&amp;')
+.replace(/</g,'&lt;')
+.replace(/>/g,'&gt;')
+.replace(/"/g,'&quot;')
+.replace(/'/g,'&#039;');
+
+}
+
+
+/* START */
+
+start();
+
+</script>
+
+</body>
+  </html>
